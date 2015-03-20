@@ -1,0 +1,40 @@
+{
+    "name": "deka6pb/yii2-autoparser",
+    "description": "Yii 2 Autoparser",
+    "keywords": ["yii2", "yii2-autoparser", "parser", "autoparser", "deka6pb"],
+    "type": "yii2-extension",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/deka6pb/yii2-autoparser/issues?state=open",
+        "source": "https://github.com/deka6pb/yii2-autoparser"
+    },
+    "authors": [
+      {
+        "name": "Mikhail Maklashov",
+        "email": "deka6pb@gmail.com"
+      }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+        "yiisoft/yii2-swiftmailer": "*",
+        "yiisoft/yii2-authclient": "*"
+    },
+    "require-dev": {
+        "yiisoft/yii2-codeception": "*",
+        "2amigos/yii2-date-picker-widget" : "*"
+    },
+    "autoload": {
+      "psr-4": {
+        "deka6pb\\autoparser\\": ""
+      }
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    }
+}
