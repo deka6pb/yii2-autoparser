@@ -58,8 +58,11 @@ Add following lines to your ```params.php``` configuration file:
 'consumers' => [
     'VkConsumer' => [
         'class' => 'backend\components\Consumers\VkConsumer',
-        'APP_ID' => 'app_id',
-        'GROUP_ID' => 'group_id',
+        'APP_ID' => ***,
+        'APP_SECRET' => '***',
+        'ACCESS_TOKEN' => '***',
+
+        'GROUP_ID' => ***,
         'on' => true
     ],
     ...
