@@ -21,8 +21,8 @@ class m150603_103331_create_posts_table extends Migration
             'sid' => Schema::TYPE_INTEGER . '(11) NOT NULL',
             'url' => Schema::TYPE_STRING . '(2083) DEFAULT NULL',
             'provider' => Schema::TYPE_STRING . '(256) NOT NULL',
-            'created' => Schema::TYPE_INTEGER . ' NOT NULL',
-            'published' => Schema::TYPE_INTEGER . ' NOT NULL',
+            'created' => Schema::TYPE_TIMESTAMP . ' NOT NULL',
+            'published' => Schema::TYPE_TIMESTAMP,
         ], $tableOptions);
     }
 

@@ -72,13 +72,13 @@ Add following lines to your ```params.php``` configuration file:
 For example:
 
 ```
-class VkConsumer extends PostDataConsumerBase {
+class VkConsumer extends APostDataConsumerBase {
     ...
 }
 ```
 
 ```
-class PikabuProvider extends PostDataProviderBase {
+class PikabuProvider extends APostDataProviderBase {
     ...
 }
 ```

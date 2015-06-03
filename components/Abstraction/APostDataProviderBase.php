@@ -7,7 +7,7 @@ use deka6pb\autoparser\models\Img;
 use deka6pb\autoparser\models\Text;
 use Yii;
 
-abstract class PostDataProviderBase implements IPostDataProvider {
+abstract class APostDataProviderBase implements IPostDataProvider {
 
     public $_posts = [];
 

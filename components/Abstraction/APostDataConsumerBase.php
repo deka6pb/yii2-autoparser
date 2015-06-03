@@ -1,7 +1,7 @@
 <?php
 namespace deka6pb\autoparser\components\Abstraction;
 
-abstract class PostDataConsumerBase implements IPostDataConsumer, IItemType {
+abstract class APostDataConsumerBase implements IPostDataConsumer, IItemType {
 
     public $on = true;
 
