@@ -10,7 +10,13 @@ use Yii;
 
 class DefaultController extends Controller
 {
+    public $layout='main';
+
     public function actionIndex() {
+        return $this->render('index', []);
+    }
+
+    public function actionRun() {
         if(Posts::countNewPosts() < $this->module->getMaxCountPosting()) {
             $collector = new CollectorService($this->module->getProviders());
             $collector->run();

@@ -2,17 +2,17 @@
 
 namespace deka6pb\autoparser\controllers;
 
-use deka6pb\autoparser\models\Posts;
-use deka6pb\autoparser\models\PostsSearch;
 use Yii;
+use deka6pb\autoparser\models\Consumer;
+use deka6pb\autoparser\models\Consumers;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PostsController implements the CRUD actions for Posts model.
+ * ConsumerController implements the CRUD actions for Consumer model.
  */
-class PostsController extends Controller
+class ConsumerController extends Controller
 {
     public $layout='main';
 
@@ -29,12 +29,12 @@ class PostsController extends Controller
     }
 
     /**
-     * Lists all Posts models.
+     * Lists all Consumer models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PostsSearch();
+        $searchModel = new Consumers();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -44,8 +44,8 @@ class PostsController extends Controller
     }
 
     /**
-     * Displays a single Posts model.
-     * @param integer $id
+     * Displays a single Consumer model.
+     * @param string $id
      * @return mixed
      */
     public function actionView($id)
@@ -56,16 +56,16 @@ class PostsController extends Controller
     }
 
     /**
-     * Creates a new Posts model.
+     * Creates a new Consumer model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Posts();
+        $model = new Consumer();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->name]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -74,9 +74,9 @@ class PostsController extends Controller
     }
 
     /**
-     * Updates an existing Posts model.
+     * Updates an existing Consumer model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -84,7 +84,7 @@ class PostsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->name]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -93,9 +93,9 @@ class PostsController extends Controller
     }
 
     /**
-     * Deletes an existing Posts model.
+     * Deletes an existing Consumer model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -106,15 +106,15 @@ class PostsController extends Controller
     }
 
     /**
-     * Finds the Posts model based on its primary key value.
+     * Finds the Consumer model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Posts the loaded model
+     * @param string $id
+     * @return Consumer the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Posts::findOne($id)) !== null) {
+        if (($model = Consumer::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -10,6 +10,7 @@ class Module extends \yii\base\Module
     public $collectionCount = 1;
     public $consumers = [];
     public $providers = [];
+    public $consumersFilePath;
 
     public $collectorService;
     public $postingService;
@@ -41,5 +42,9 @@ class Module extends \yii\base\Module
 
     public function getTmpDir() {
         return $this->tmpDir;
+    }
+
+    public function getConsumersFilePath() {
+        return $this->consumersFilePath;
     }
 }

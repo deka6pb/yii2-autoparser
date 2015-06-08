@@ -39,7 +39,7 @@ class PostingService implements IPostingService, IItemStatus {
                 throw new \yii\base\Exception('This provider does not belong to the interface IPostDataProvider', 400);
             }
 
-            if($component->on !== false) {
+            if((bool)$component->on != false) {
                 $component->init();
                 $this->_enabledConsumers[] = $component;
             }
