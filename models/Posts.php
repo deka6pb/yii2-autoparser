@@ -33,13 +33,15 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
 {
     use TItemStatus;
 
-   // public $files;
+    // public $files;
 
     const SCENARIO_INSERT = 'create';
     const SCENARIO_UPDATE = 'update';
 
-    public function init() {
+    const DEFAULT_TYPE = 'Manually';
 
+    public function init() {
+        $this->status = self::STATUS_NEW;
     }
     /**
      * @inheritdoc
@@ -212,6 +214,24 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
         return $this->text;
     }
     //endregion
+
+    public function beforeValidate() {
+        if(!is_int($this->type)) {
+            $this->type = (int) $this->type;
+        }
+
+        if(empty($this->provider)) {
+            $this->provider = self::DEFAULT_TYPE;
+        }
+
+        if(empty($this->sid)) {
+            $last_post = Posts::find()->where(['provider' => $this->provider])->orderBy('sid')->one();
+            $last_sid = (!empty($last_post->sid)) ? $last_post->sid : 0;
+            $this->sid = ++$last_sid;
+        }
+
+        return parent::beforeValidate();
+    }
 
     public function beforeSave($insert) {
         if(!empty($this->files)) {

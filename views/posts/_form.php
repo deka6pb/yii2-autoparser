@@ -1,5 +1,7 @@
 <?php
 
+use deka6pb\autoparser\models\Posts;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -12,21 +14,22 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'type')->textInput() ?>
-
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+
+    <?= $form->field($model, 'type')->dropDownList(
+        Posts::getTypesAliases(),
+        ['prompt'=>'']
+    );?>
+
+    <?php if(!$model->isNewRecord): ?>
+        <?= $form->field($model, 'status')->dropDownList(
+            Posts::getStatusAliases(),
+            ['prompt'=>'']
+        );?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'tags')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'sid')->textInput() ?>
-
-    <?= $form->field($model, 'provider')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'created')->textInput() ?>
-
-    <?= $form->field($model, 'published')->textInput() ?>
 
     <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
 
