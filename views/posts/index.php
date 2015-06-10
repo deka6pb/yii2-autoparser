@@ -32,8 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             },
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'id',
                 'options' => ['width' => '30']
@@ -42,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'type',
                 'options' => ['width' => '30']
             ],
-            //'text:ntext',
+            'text:ntext',
             [
                 'attribute' => 'status',
                 'format' => 'html',
@@ -52,7 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         Posts::getStatusAliases(),
                         ['class' => 'form-control']
                     ),
-                'options' => ['width' => '30']
+                'options' => ['width' => '30'],
+                'value' => function($model) {
+                    return $model->getStatus();
+                }
             ],
             [
                 'attribute' => 'tags',
@@ -92,7 +93,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ])
             ],
-            //'url:url',
             [
                 'attribute' => 'url',
                 'format' =>  'raw',
