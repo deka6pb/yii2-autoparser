@@ -41,7 +41,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
     const DEFAULT_TYPE = 'Manually';
 
     public function init() {
-        $this->status = self::STATUS_NEW;
+
     }
     /**
      * @inheritdoc
@@ -216,6 +216,14 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
     //endregion
 
     public function beforeValidate() {
+        if(!isset(self::scenarios()[$this->scenario])) {
+            return parent::beforeValidate();
+        }
+
+        if($this->scenario === self::SCENARIO_INSERT) {
+            $this->status = self::STATUS_NEW;
+        }
+
         if(!is_int($this->type)) {
             $this->type = (int) $this->type;
         }
@@ -225,7 +233,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
         }
 
         if(empty($this->sid)) {
-            $last_post = Posts::find()->where(['provider' => $this->provider])->orderBy('sid')->one();
+            $last_post = Posts::find()->where(['provider' => $this->provider])->orderBy('sid desc')->one();
             $last_sid = (!empty($last_post->sid)) ? $last_post->sid : 0;
             $this->sid = ++$last_sid;
         }
