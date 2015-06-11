@@ -22,7 +22,7 @@ class Consumers extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'Consumers';
+        return 'consumers';
     }
 
     /**
