@@ -2,17 +2,19 @@
 
 namespace deka6pb\autoparser\controllers;
 
+use deka6pb\autoparser\models\OptionsConsumer;
 use Yii;
-use deka6pb\autoparser\models\Consumer;
 use deka6pb\autoparser\models\Consumers;
+use yii\data\ActiveDataProvider;
+use yii\helpers\BaseJson;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ConsumerController implements the CRUD actions for Consumer model.
+ * ConsumersController implements the CRUD actions for Consumers model.
  */
-class ConsumerController extends Controller
+class ConsumersController extends Controller
 {
     public $layout='main';
 
@@ -29,73 +31,93 @@ class ConsumerController extends Controller
     }
 
     /**
-     * Lists all Consumer models.
+     * Lists all Consumers models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new Consumers();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Consumers::find(),
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Consumer model.
-     * @param string $id
+     * Displays a single Consumers model.
+     * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $modelOptions = new OptionsConsumer();
+
+        $modelOptions->attributes = $model->getOptionsToArray();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'modelOptions' => $modelOptions
         ]);
     }
 
     /**
-     * Creates a new Consumer model.
+     * Creates a new Consumers model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Consumer();
+        $model = new Consumers();
+        $modelOptions = new OptionsConsumer();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->name]);
+        if ($modelOptions->load(Yii::$app->request->post()) && $modelOptions->validate()) {
+            $model->name = $modelOptions->name;
+            $model->options = BaseJson::encode($modelOptions->attributes);
+            $model->save();
+
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'modelOptions' => $modelOptions
             ]);
         }
     }
 
     /**
-     * Updates an existing Consumer model.
+     * Updates an existing Consumers model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $modelOptions = new OptionsConsumer();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->name]);
+        $modelOptions->attributes = $model->getOptionsToArray();
+
+        if ($modelOptions->load(Yii::$app->request->post()) && $modelOptions->validate()) {
+            $model->name = $modelOptions->name;
+            $model->options = BaseJson::encode($modelOptions->attributes);
+            $model->save();
+
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'modelOptions' => $modelOptions
             ]);
         }
     }
 
     /**
-     * Deletes an existing Consumer model.
+     * Deletes an existing Consumers model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -106,15 +128,15 @@ class ConsumerController extends Controller
     }
 
     /**
-     * Finds the Consumer model based on its primary key value.
+     * Finds the Consumers model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return Consumer the loaded model
+     * @param integer $id
+     * @return Consumers the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Consumer::findOne($id)) !== null) {
+        if (($model = Consumers::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

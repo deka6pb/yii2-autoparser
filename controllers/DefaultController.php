@@ -13,7 +13,7 @@ class DefaultController extends Controller
     public $layout='main';
 
     public function actionIndex() {
-        return $this->render('index', []);
+        $this->redirect("/autoparser/posts");
     }
 
     public function actionRun() {
@@ -22,7 +22,8 @@ class DefaultController extends Controller
             $collector->run();
         }
 
-        $posting = new PostingService($this->module->getConsumers());
+        $posting = new PostingService();
         $posting->run();
+        $this->redirect("index");
     }
 }

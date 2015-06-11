@@ -33,7 +33,7 @@ AppAsset::register($this);
             ]);
             $menuItems = [
                 ['label' => 'Home', 'url' => ['#']],
-                ['label' => 'Consumers', 'url' => ['consumer/index']],
+                ['label' => 'Consumers', 'url' => ['consumers/index']],
                 ['label' => 'Posts', 'url' => ['posts/index']],
                 ['label' => 'Run', 'url' => ['default/run']],
             ];

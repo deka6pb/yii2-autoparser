@@ -2,64 +2,59 @@
 
 namespace deka6pb\autoparser\models;
 
+use deka6pb\autoparser\models\OptionsConsumer;
 use Yii;
-use yii\base\Model;
-use yii\data\ActiveDataProvider;
-use yii\data\ArrayDataProvider;
+use yii\helpers\BaseJson;
 
 /**
- * Consumers represents the model behind the search form about `deka6pb\autoparser\models\Consumer`.
+ * This is the model class for table "Consumers".
+ *
+ * @property integer $id
+ * @property string $name
+ * @property string $options
  */
-class Consumers extends Consumer
+class Consumers extends \yii\db\ActiveRecord
 {
-    public $filePath;
+    public $optionsModel;
 
-    public function __construct() {
-        $this->filePath = Yii::$app->controller->module->getConsumersFilePath();
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'Consumers';
     }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['name', 'class', 'APP_ID', 'APP_SECRET', 'ACCESS_TOKEN', 'CODE', 'GROUP_ID', 'ALBUM_ID'], 'safe'],
-            [['on'], 'integer'],
+            [['name', 'options'], 'required'],
+            ['name', 'unique'],
+            [['options'], 'string'],
+            [['name'], 'string', 'max' => 256]
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function scenarios()
+    public function attributeLabels()
     {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
+        return [
+            'id' => 'ID',
+            'name' => 'Name',
+            'options' => 'Options',
+        ];
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
-    public function search($params)
-    {
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => Consumer::getAll(),
-            'sort' => [
-                'attributes' => [],
-            ],
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-        ]);
-
-        $this->load($params);
-
-        return $dataProvider;
+    public function getOptionsToArray() {
+        return BaseJson::decode($this->options);
     }
 
-
+    public function __toString() {
+        return $this->options;
+    }
 }

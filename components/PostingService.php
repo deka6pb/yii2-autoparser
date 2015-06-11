@@ -5,6 +5,7 @@ use deka6pb\autoparser\components\Abstraction\IItemStatus;
 use deka6pb\autoparser\components\Abstraction\IPostDataConsumer;
 use deka6pb\autoparser\components\Abstraction\IPostingService;
 use deka6pb\autoparser\components\TItemStatus;
+use deka6pb\autoparser\models\Consumers;
 use deka6pb\autoparser\models\Posts;
 use Yii;
 
@@ -17,8 +18,8 @@ class PostingService implements IPostingService, IItemStatus {
     private $_postCollection = [];
     private $_count;
 
-    public function __construct($consumers) {
-        $this->setConsumers($consumers);
+    public function __construct() {
+        $this->setConsumers();
         $this->init();
     }
 
@@ -76,8 +77,11 @@ class PostingService implements IPostingService, IItemStatus {
         return $this->_postCollection;
     }
 
-    private function setConsumers($consumers) {
-        if(is_array($consumers))
-            $this->_consumers = $consumers;
+    private function setConsumers() {
+        $consumers = Consumers::find()->all();
+
+        foreach($consumers AS $objConsumer) {
+            $this->_consumers[] = $objConsumer->getOptionsToArray();
+        }
     }
 }

@@ -43,7 +43,7 @@ class PostsController extends Controller
         ]);
     }
 
-    /**
+    /**{{%consumer}}'
      * Displays a single Posts model.
      * @param integer $id
      * @return mixed
