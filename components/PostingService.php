@@ -8,6 +8,7 @@ use deka6pb\autoparser\components\TItemStatus;
 use deka6pb\autoparser\models\Consumers;
 use deka6pb\autoparser\models\Posts;
 use Yii;
+use yii\base\Exception;
 
 class PostingService implements IPostingService, IItemStatus {
 
@@ -37,7 +38,7 @@ class PostingService implements IPostingService, IItemStatus {
         foreach($this->_consumers AS $consumer) {
             $component = Yii::createObject($consumer);
             if(!($component instanceof IPostDataConsumer)) {
-                throw new \yii\base\Exception('This provider does not belong to the interface IPostDataProvider', 400);
+                throw new Exception('This provider does not belong to the interface IPostDataProvider', 400);
             }
 
             if((bool)$component->on != false) {
@@ -68,7 +69,7 @@ class PostingService implements IPostingService, IItemStatus {
         foreach($this->_postCollection AS $post) {
             $post->setPublished();
             foreach($post->files AS $file) {
-                $file->deleteFile();
+                FileFileSystem::deleteFile($file->name);
             }
         }
     }

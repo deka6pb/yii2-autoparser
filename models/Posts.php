@@ -136,9 +136,9 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
 
     public static function getTypesAliases(){
         return [
-            self::TYPE_TEXT                 => 'txt',
-            self::TYPE_IMG                  => 'img',
-            self::TYPE_GIF                  => 'gif',
+            self::TYPE_TEXT                 => 'Text',
+            self::TYPE_IMG                  => 'Text & Picture',
+            self::TYPE_GIF                  => 'Text & Animation',
         ];
     }
 

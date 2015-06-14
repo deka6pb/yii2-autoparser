@@ -14,13 +14,12 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
-
-
     <?= $form->field($model, 'type')->dropDownList(
         Posts::getTypesAliases(),
         ['prompt'=>'']
     );?>
+
+    <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
 
     <?php if(!$model->isNewRecord): ?>
         <?= $form->field($model, 'status')->dropDownList(
@@ -29,7 +28,7 @@ use yii\widgets\ActiveForm;
         );?>
     <?php endif; ?>
 
-    <?= $form->field($model, 'tags')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'tags')->textInput(['maxlength' => true,]) ?>
 
     <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
 

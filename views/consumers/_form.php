@@ -1,5 +1,6 @@
 <?php
 
+use deka6pb\autoparser\models\Consumers;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -14,7 +15,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($modelOptions, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($modelOptions, 'class')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($modelOptions, 'class')->dropDownList(
+        Consumers::getConsumers()
+    );?>
 
     <?= $form->field($modelOptions, 'APP_ID')->textInput(['maxlength' => true]) ?>
 

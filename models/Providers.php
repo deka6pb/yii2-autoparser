@@ -2,28 +2,24 @@
 
 namespace deka6pb\autoparser\models;
 
-use deka6pb\autoparser\components\FileFileSystem;
-use deka6pb\autoparser\models\OptionsConsumer;
 use Yii;
 use yii\helpers\BaseJson;
 
 /**
- * This is the model class for table "Consumers".
+ * This is the model class for table "providers".
  *
  * @property integer $id
  * @property string $name
  * @property string $options
  */
-class Consumers extends \yii\db\ActiveRecord
+class Providers extends \yii\db\ActiveRecord
 {
-    public $optionsModel;
-
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'consumers';
+        return 'providers';
     }
 
     /**
@@ -33,7 +29,6 @@ class Consumers extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'options'], 'required'],
-            ['name', 'unique'],
             [['options'], 'string'],
             [['name'], 'string', 'max' => 256]
         ];
@@ -51,8 +46,9 @@ class Consumers extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getConsumers() {
-        return Yii::$app->controller->module->getConsumers();
+    public static function getProviders() {
+        $local = Yii::$app->controller->module->getProviders();
+        return Yii::$app->controller->module->getProviders();
     }
 
     public function getOptionsToArray() {

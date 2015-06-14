@@ -4,6 +4,7 @@ namespace deka6pb\autoparser\components;
 use deka6pb\autoparser\components\Abstraction\ICollectorService;
 use deka6pb\autoparser\components\Abstraction\IPostDataProvider;
 use deka6pb\autoparser\models\Posts;
+use deka6pb\autoparser\models\Providers;
 use Yii;
 
 class CollectorService implements ICollectorService {
@@ -12,8 +13,8 @@ class CollectorService implements ICollectorService {
     private $_enabledProviders = [];
     private $_postCollection = [];
 
-    public function __construct($providers) {
-        $this->setProviders($providers);
+    public function __construct() {
+        $this->setProviders();
         $this->init();
     }
 
@@ -50,8 +51,11 @@ class CollectorService implements ICollectorService {
         return $this->_postCollection;
     }
 
-    private function setProviders($providers) {
-        if(is_array($providers))
-            $this->_providers = $providers;
+    private function setProviders() {
+        $providers = Providers::find()->all();
+
+        foreach($providers AS $objProvider) {
+            $this->_providers[] = $objProvider->getOptionsToArray();
+        }
     }
 }

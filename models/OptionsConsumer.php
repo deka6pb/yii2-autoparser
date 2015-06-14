@@ -1,11 +1,9 @@
 <?php
 namespace deka6pb\autoparser\models;
 
-use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
-class OptionsConsumer extends Model {
-    public $name;
-    public $class;
+class OptionsConsumer extends Options {
     public $APP_ID;
     public $APP_SECRET;
     public $ACCESS_TOKEN;
@@ -19,11 +17,11 @@ class OptionsConsumer extends Model {
      */
     public function rules()
     {
-        return [
-            [['name', 'class', 'APP_ID', 'APP_SECRET', 'ACCESS_TOKEN', 'CODE', 'GROUP_ID', 'ALBUM_ID'], 'required'],
+        return ArrayHelper::merge(parent::rules(), [
+            [['APP_ID', 'APP_SECRET', 'ACCESS_TOKEN', 'CODE', 'GROUP_ID', 'ALBUM_ID'], 'required'],
             [['on'], 'integer'],
-            [['name', 'class', 'APP_ID', 'APP_SECRET', 'ACCESS_TOKEN', 'CODE', 'GROUP_ID', 'ALBUM_ID'], 'string', 'max' => 255]
-        ];
+            [['APP_ID', 'APP_SECRET', 'ACCESS_TOKEN', 'CODE', 'GROUP_ID', 'ALBUM_ID'], 'string', 'max' => 255]
+        ]);
     }
 
     /**
@@ -31,9 +29,7 @@ class OptionsConsumer extends Model {
      */
     public function attributeLabels()
     {
-        return [
-            'name' => 'Name',
-            'class' => 'Class',
+        return ArrayHelper::merge(parent::attributeLabels(), [
             'app_id' => 'App ID',
             'app_secret' => 'App Secret',
             'access_token' => 'Access Token',
@@ -41,10 +37,6 @@ class OptionsConsumer extends Model {
             'group_id' => 'Group ID',
             'album_id' => 'Album ID',
             'on' => 'On',
-        ];
-    }
-
-    public function __toString() {
-        return $this->name;
+        ]);
     }
 }

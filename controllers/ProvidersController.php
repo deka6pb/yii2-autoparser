@@ -2,9 +2,9 @@
 
 namespace deka6pb\autoparser\controllers;
 
-use deka6pb\autoparser\models\OptionsConsumer;
+use deka6pb\autoparser\models\OptionsProvider;
 use Yii;
-use deka6pb\autoparser\models\Consumers;
+use deka6pb\autoparser\models\providers;
 use yii\data\ActiveDataProvider;
 use yii\helpers\BaseJson;
 use yii\web\Controller;
@@ -12,12 +12,11 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ConsumersController implements the CRUD actions for Consumers model.
+ * ProvidersController implements the CRUD actions for providers model.
  */
-class ConsumersController extends Controller
+class ProvidersController extends Controller
 {
     public $layout='main';
-    public $homeUrl='/autoparser';
 
     public function behaviors()
     {
@@ -32,13 +31,13 @@ class ConsumersController extends Controller
     }
 
     /**
-     * Lists all Consumers models.
+     * Lists all providers models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Consumers::find(),
+            'query' => providers::find(),
         ]);
 
         return $this->render('index', [
@@ -47,32 +46,32 @@ class ConsumersController extends Controller
     }
 
     /**
-     * Displays a single Consumers model.
+     * Displays a single providers model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $modelOptions = new OptionsConsumer();
+        $modelOptions = new OptionsProvider();
 
         $modelOptions->attributes = $model->getOptionsToArray();
 
         return $this->render('view', [
-            'model' => $model,
+            'model' => $this->findModel($id),
             'modelOptions' => $modelOptions,
         ]);
     }
 
     /**
-     * Creates a new Consumers model.
+     * Creates a new providers model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Consumers();
-        $modelOptions = new OptionsConsumer();
+        $model = new Providers();
+        $modelOptions = new OptionsProvider();
 
         if ($modelOptions->load(Yii::$app->request->post()) && $modelOptions->validate()) {
             $model->name = $modelOptions->name;
@@ -89,7 +88,7 @@ class ConsumersController extends Controller
     }
 
     /**
-     * Updates an existing Consumers model.
+     * Updates an existing providers model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -97,9 +96,7 @@ class ConsumersController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $modelOptions = new OptionsConsumer();
-
-        $modelOptions->attributes = $model->getOptionsToArray();
+        $modelOptions = new OptionsProvider();
 
         if ($modelOptions->load(Yii::$app->request->post()) && $modelOptions->validate()) {
             $model->name = $modelOptions->name;
@@ -116,7 +113,7 @@ class ConsumersController extends Controller
     }
 
     /**
-     * Deletes an existing Consumers model.
+     * Deletes an existing providers model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -129,15 +126,15 @@ class ConsumersController extends Controller
     }
 
     /**
-     * Finds the Consumers model based on its primary key value.
+     * Finds the providers model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Consumers the loaded model
+     * @return providers the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Consumers::findOne($id)) !== null) {
+        if (($model = Providers::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

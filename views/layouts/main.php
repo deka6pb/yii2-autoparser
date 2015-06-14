@@ -1,5 +1,6 @@
 <?php
 use backend\assets\AppAsset;
+use deka6pb\autoparser\assets\ModuleAsset;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -9,6 +10,7 @@ use yii\widgets\Breadcrumbs;
 /* @var $content string */
 
 AppAsset::register($this);
+ModuleAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -26,14 +28,15 @@ AppAsset::register($this);
         <?php
             NavBar::begin([
                 'brandLabel' => 'yii2-autoparser',
-                'brandUrl' => Yii::$app->homeUrl,
+                'brandUrl' => '/autoparser/posts/',
                 'options' => [
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
             $menuItems = [
-                ['label' => 'Home', 'url' => ['#']],
+                ['label' => 'Home', 'url' => ['/autoparser/#']],
                 ['label' => 'Consumers', 'url' => ['consumers/index']],
+                ['label' => 'Providers', 'url' => ['providers/index']],
                 ['label' => 'Posts', 'url' => ['posts/index']],
                 ['label' => 'Run', 'url' => ['default/run']],
             ];
@@ -55,6 +58,10 @@ AppAsset::register($this);
 
         <div class="container">
         <?= Breadcrumbs::widget([
+            'homeLink' => [
+                'label' => Yii::t('yii', 'Home'),
+                'url' => '/autoparser/posts/#',
+            ],
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= $content ?>

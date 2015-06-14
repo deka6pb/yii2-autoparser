@@ -2,22 +2,30 @@
 
 namespace deka6pb\autoparser;
 
-class Module extends \yii\base\Module
-{
+class Module extends \yii\base\Module {
     public $controllerNamespace = 'deka6pb\autoparser\controllers';
     public $tmpDir = "@runtime/tmp";
     public $postingCount = 1;
     public $collectionCount = 1;
-    public $consumers = [];
-    public $providers = [];
-    public $consumersFilePath;
+    private $_providers = [];
+    private $_consumers = [];
+
+    private $defaultConsumersClasses = [
+        'deka6pb\autoparser\components\Concrete\Consumers\VkConsumer' => 'Vk'
+    ];
+    public $userConsumersClasses = [];
+
+    private $defaultProvidersClasses = [];
+    public $userProvidersClasses = [];
 
     public $collectorService;
     public $postingService;
 
-    public function init()
-    {
+    public function init() {
         parent::init();
+
+        $this->_providers = $this->mergeProviders();
+        $this->_consumers = $this->mergeConsumers();
 
         $handler = new components\ApiErrorHandler;
         \Yii::$app->set('errorHandler', $handler);
@@ -32,19 +40,39 @@ class Module extends \yii\base\Module
         return $this->collectionCount;
     }
 
-    public function getConsumers() {
-        return $this->consumers;
+    public function getProviders() {
+        return $this->_providers;
     }
 
-    public function getProviders() {
-        return $this->providers;
+    public function getConsumers() {
+        return $this->_consumers;
     }
 
     public function getTmpDir() {
         return $this->tmpDir;
     }
 
-    public function getConsumersFilePath() {
-        return $this->consumersFilePath;
+    public function getUserConsumersClasses() {
+        return $this->userConsumersClasses;
+    }
+
+    public function getDefaultConsumersClasses() {
+        return $this->defaultConsumersClasses;
+    }
+
+    public function getUserProvidersClasses() {
+        return $this->userProvidersClasses;
+    }
+
+    public function getDefaultProvidersClasses() {
+        return $this->defaultProvidersClasses;
+    }
+
+    private function mergeProviders() {
+        return array_merge($this->defaultProvidersClasses, $this->userProvidersClasses);
+    }
+
+    private function mergeConsumers() {
+        return array_merge($this->defaultConsumersClasses, $this->userConsumersClasses);
     }
 }

@@ -18,7 +18,7 @@ class DefaultController extends Controller
 
     public function actionRun() {
         if(Posts::countNewPosts() < $this->module->getMaxCountPosting()) {
-            $collector = new CollectorService($this->module->getProviders());
+            $collector = new CollectorService();
             $collector->run();
         }
 
