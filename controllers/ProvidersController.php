@@ -4,7 +4,7 @@ namespace deka6pb\autoparser\controllers;
 
 use deka6pb\autoparser\models\OptionsProvider;
 use Yii;
-use deka6pb\autoparser\models\providers;
+use deka6pb\autoparser\models\Providers;
 use yii\data\ActiveDataProvider;
 use yii\helpers\BaseJson;
 use yii\web\Controller;
@@ -12,7 +12,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ProvidersController implements the CRUD actions for providers model.
+ * ProvidersController implements the CRUD actions for Providers model.
  */
 class ProvidersController extends Controller
 {
@@ -31,13 +31,13 @@ class ProvidersController extends Controller
     }
 
     /**
-     * Lists all providers models.
+     * Lists all Providers models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => providers::find(),
+            'query' => Providers::find(),
         ]);
 
         return $this->render('index', [
@@ -46,7 +46,7 @@ class ProvidersController extends Controller
     }
 
     /**
-     * Displays a single providers model.
+     * Displays a single Providers model.
      * @param integer $id
      * @return mixed
      */
@@ -64,7 +64,7 @@ class ProvidersController extends Controller
     }
 
     /**
-     * Creates a new providers model.
+     * Creates a new Providers model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -88,7 +88,7 @@ class ProvidersController extends Controller
     }
 
     /**
-     * Updates an existing providers model.
+     * Updates an existing Providers model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -113,7 +113,7 @@ class ProvidersController extends Controller
     }
 
     /**
-     * Deletes an existing providers model.
+     * Deletes an existing Providers model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -126,10 +126,10 @@ class ProvidersController extends Controller
     }
 
     /**
-     * Finds the providers model based on its primary key value.
+     * Finds the Providers model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return providers the loaded model
+     * @return Providers the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
