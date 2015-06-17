@@ -6,6 +6,7 @@ use deka6pb\autoparser\components\Abstraction\IPostDataProvider;
 use deka6pb\autoparser\models\Posts;
 use deka6pb\autoparser\models\Providers;
 use Yii;
+use yii\base\Exception;
 
 class CollectorService implements ICollectorService {
 
@@ -24,7 +25,7 @@ class CollectorService implements ICollectorService {
             $component->init();
 
             if(!($component instanceof IPostDataProvider)) {
-                throw new \yii\base\Exception('This provider does not belong to the interface IPostDataProvider', 400);
+                throw new Exception('This provider does not belong to the interface IPostDataProvider', 400);
             }
 
             if($component->on != false)

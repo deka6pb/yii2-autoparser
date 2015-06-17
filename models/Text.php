@@ -12,7 +12,6 @@ class Text extends Posts
     {
         return ArrayHelper::merge(parent::rules(), [
             ['text', 'required'],
-            ['text', 'string', 'max'=> 15895],
         ]);
     }
 }

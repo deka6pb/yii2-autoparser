@@ -6,10 +6,15 @@ use deka6pb\autoparser\components\Abstraction\IDataTimeFormats;
 use deka6pb\autoparser\components\Abstraction\IItemStatus;
 use deka6pb\autoparser\components\Abstraction\IItemType;
 use deka6pb\autoparser\components\DateTimeStampBehavior;
+use deka6pb\autoparser\components\FileFileSystem;
 use deka6pb\autoparser\components\TItemStatus;
+use deka6pb\autoparser\components\UploadedFiles;
+use Faker\Provider\File;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\BaseActiveRecord;
+use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "posts".
@@ -33,7 +38,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
 {
     use TItemStatus;
 
-    // public $files;
+    private $files;
 
     const SCENARIO_INSERT = 'create';
     const SCENARIO_UPDATE = 'update';
@@ -62,7 +67,12 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
             ['sid', 'unique'],
             [['text'], 'string'],
             [['tags', 'provider'], 'string', 'max' => 256],
-            [['url'], 'string', 'max' => 2083]
+            [['url'], 'string', 'max' => 2083],
+            ['text', 'string', 'max'=> 15895],
+            [['files'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, gif', 'maxFiles' => 8],
+            [['files'], 'required', 'when' => function($model) {
+                return $model->type == 2 || $model->type == 3;
+            }],
         ];
     }
 
@@ -185,6 +195,10 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
     {
         return $this->hasMany(Files::className(), ['id' => 'file_id'])->viaTable('post_file', ['post_id' => 'id']);
     }
+
+    public function setFiles($value) {
+        $this->files[] = $value;
+    }
     //endregion
 
     /**
@@ -206,7 +220,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
 
     //region Get and Set
     public function setText($text) {
-        $text = addslashes(strip_tags(str_replace(array("<br>", "<br/>", "<br />"), "", $text)));
+        $text = addslashes(strip_tags(str_replace(["<br>", "<br/>", "<br />"], "", $text)));
         $this->text = $text;
     }
 
@@ -242,40 +256,24 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
     }
 
     public function beforeSave($insert) {
+        $urls = [];
         if(!empty($this->files)) {
             foreach($this->files AS $file) {
-                if(!$file->validate())
-                    return false;
-
-                if(!$file->save()) {
-                    $file->stopTransaction();
-                    return false;
-                }
+                $urls[] = $file->url;
             }
+            $classInfo = FileFileSystem::parseClassname(get_class($this));
+            $_FILES[$classInfo['classname']] = FileFileSystem::getFilesInfo('files', $urls);
         }
 
         return parent::beforeSave($insert);
     }
 
     public function afterSave($insert, $changedAttributes) {
+        $this->files = UploadedFiles::getInstances($this, 'files');
+
         if(!empty($this->files)) {
-            foreach($this->files AS $file) {
-                if(!$file->validate())
-                    return false;
-
-                if(!$file->save()) {
-                    $file->stopTransaction();
-                    return false;
-                }
-
-                $postFile = new PostFile();
-                $postFile->post_id = $this->id;
-                $postFile->file_id = $file->id;
-
-                if(!$postFile->validate() || !$postFile->save()) {
-                    $postFile->stopTransaction();
-                    return false;
-                }
+            if(!$this->upload()) {
+                return false;
             }
         }
 
@@ -286,5 +284,35 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
         return Posts::find()
             ->where(['status' => self::STATUS_NEW])
             ->count();
+    }
+
+    public function upload() {
+        if ($this->validate()) {
+            foreach ($this->files as $file) {
+                $filename = $file->baseName . '.' . $file->extension;
+                $file->saveAs(FileFileSystem::getFilePath($filename));
+
+                $fileModel = new Files();
+                $fileModel->name = $file->name;
+                $fileModel->url = FileFileSystem::getFilePath($file->name);
+
+                if(!$fileModel->save()) {
+                    $file->stopTransaction();
+                    return false;
+                }
+
+                $postFile = new PostFile();
+                $postFile->post_id = $this->id;
+                $postFile->file_id = $fileModel->id;
+
+                if(!$postFile->validate() || !$postFile->save()) {
+                    $postFile->stopTransaction();
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

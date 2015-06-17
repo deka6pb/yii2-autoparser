@@ -68,9 +68,6 @@ class PostingService implements IPostingService, IItemStatus {
     function afterRun() {
         foreach($this->_postCollection AS $post) {
             $post->setPublished();
-            foreach($post->files AS $file) {
-                FileFileSystem::deleteFile($file->name);
-            }
         }
     }
 

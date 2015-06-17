@@ -4,7 +4,9 @@ namespace deka6pb\autoparser\components\Abstraction;
 use deka6pb\autoparser\models\Files;
 use deka6pb\autoparser\models\Gif;
 use deka6pb\autoparser\models\Img;
+use deka6pb\autoparser\models\Posts;
 use deka6pb\autoparser\models\Text;
+use tests\models\Post;
 use Yii;
 
 abstract class APostDataProviderBase implements IPostDataProvider {
@@ -49,7 +51,7 @@ abstract class APostDataProviderBase implements IPostDataProvider {
             $file->url = $url;
             $file->name = basename($url);
             if($file->validate())
-                $post->files[] = $file;
+                $post->files = $file;
         }
 
         $post->setAttributes($attributes);
@@ -73,7 +75,7 @@ abstract class APostDataProviderBase implements IPostDataProvider {
             $file->url = $url;
             $file->name = basename($url);
             if($file->validate()) {
-                $post->files[] = $file;
+                $post->files = $file;
             }
         }
 

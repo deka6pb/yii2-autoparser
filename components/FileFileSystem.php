@@ -32,6 +32,23 @@ class FileFileSystem {
             ]
         ];
     }
+
+    public static function getFilesInfo($propertyName, $filenames) {
+        $result = [];
+        foreach($filenames AS $filename) {
+            //$filePath = self::getFilePath($filename);
+            $info = new SplFileInfo($filename);
+
+            $result['error'][$propertyName][] = 0;
+            $result['name'][$propertyName][] = $info->getFilename();
+            $result['size'][$propertyName][] = (!empty($info->getSize)) ? $info->getSize() : 0;
+            $result['tmp_name'][$propertyName][] = $info->getPathname();
+            $result['type'][$propertyName][] = 'application/' . $info->getExtension();
+        }
+
+        return $result;
+    }
+
     public static function saveFile($url, $filePath) {
         if(empty($filePath))
             throw new ErrorException;
