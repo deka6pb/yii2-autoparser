@@ -7,5 +7,6 @@ interface IItemStatus {
     const STATUS_STOPPED = 2;
 
     public function setNew();
+
     public function setPublished();
 }

@@ -4,9 +4,7 @@ namespace deka6pb\autoparser\components\Abstraction;
 use deka6pb\autoparser\models\Files;
 use deka6pb\autoparser\models\Gif;
 use deka6pb\autoparser\models\Img;
-use deka6pb\autoparser\models\Posts;
 use deka6pb\autoparser\models\Text;
-use tests\models\Post;
 use Yii;
 
 abstract class APostDataProviderBase implements IPostDataProvider {
@@ -37,8 +35,9 @@ abstract class APostDataProviderBase implements IPostDataProvider {
         $post->setAttributes($attributes);
         $post->provider = $this->providerName;
 
-        if(!$post->validate())
+        if (!$post->validate())
             return null;
+
         return $post;
     }
 
@@ -46,11 +45,11 @@ abstract class APostDataProviderBase implements IPostDataProvider {
         $post = new Img();
         $post->setScenario($post::SCENARIO_INSERT);
 
-        foreach($urls AS $url) {
+        foreach ($urls AS $url) {
             $file = new Files();
             $file->url = $url;
             $file->name = basename($url);
-            if($file->validate())
+            if ($file->validate())
                 $post->uploadFiles[] = $file;
         }
 
@@ -59,7 +58,7 @@ abstract class APostDataProviderBase implements IPostDataProvider {
         $post->status = Img::STATUS_NEW;
         $post->setAttribute('type', $post->type);
 
-        if(!$post->validate()) {
+        if (!$post->validate()) {
             return null;
         }
 
@@ -71,11 +70,11 @@ abstract class APostDataProviderBase implements IPostDataProvider {
 
         $post->setScenario($post::SCENARIO_INSERT);
 
-        foreach($urls AS $url) {
+        foreach ($urls AS $url) {
             $file = new Files();
             $file->url = $url;
             $file->name = basename($url);
-            if($file->validate()) {
+            if ($file->validate()) {
                 $post->uploadFiles[] = $file;
             }
         }
@@ -85,11 +84,13 @@ abstract class APostDataProviderBase implements IPostDataProvider {
         $post->status = Gif::STATUS_NEW;
         $post->setAttribute('type', $post->type);
 
-        if(!$post->validate()) {
+        if (!$post->validate()) {
             return null;
         }
+
         return $post;
     }
+
     //endregion
 
     public static function getExtension($filename) {

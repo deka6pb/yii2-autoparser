@@ -9,13 +9,11 @@ use yii\data\ActiveDataProvider;
 /**
  * PostsSearch represents the model behind the search form about `backend\models\Posts`.
  */
-class PostsSearch extends Posts
-{
+class PostsSearch extends Posts {
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'type', 'status', 'sid'], 'integer'],
             [['text', 'tags', 'provider', 'created', 'published', 'url'], 'safe'],
@@ -25,8 +23,7 @@ class PostsSearch extends Posts
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -38,8 +35,7 @@ class PostsSearch extends Posts
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = Posts::find();
 
         $dataProvider = new ActiveDataProvider([
@@ -55,10 +51,10 @@ class PostsSearch extends Posts
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
-            'type' => $this->type,
+            'id'     => $this->id,
+            'type'   => $this->type,
             'status' => $this->status,
-            'sid' => $this->sid,
+            'sid'    => $this->sid,
         ]);
 
         $query->andFilterWhere(['like', 'text', $this->text])

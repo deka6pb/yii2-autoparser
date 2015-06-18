@@ -5,23 +5,20 @@ namespace deka6pb\autoparser\controllers;
 use deka6pb\autoparser\models\Posts;
 use deka6pb\autoparser\models\PostsSearch;
 use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
 
 /**
  * PostsController implements the CRUD actions for Posts model.
  */
-class PostsController extends Controller
-{
-    public $layout='main';
+class PostsController extends Controller {
+    public $layout = 'main';
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
                 ],
@@ -33,13 +30,12 @@ class PostsController extends Controller
      * Lists all Posts models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new PostsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -49,8 +45,7 @@ class PostsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -61,8 +56,7 @@ class PostsController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new Posts();
         $model->scenario = Posts::SCENARIO_INSERT;
 
@@ -81,8 +75,7 @@ class PostsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
         $model->scenario = Posts::SCENARIO_INSERT;
 
@@ -101,8 +94,7 @@ class PostsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -115,8 +107,7 @@ class PostsController extends Controller
      * @return Posts the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = Posts::findOne($id)) !== null) {
             return $model;
         } else {

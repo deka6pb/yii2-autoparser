@@ -3,8 +3,7 @@ namespace deka6pb\autoparser\assets;
 
 use yii\web\AssetBundle;
 
-class ModuleAsset extends AssetBundle
-{
+class ModuleAsset extends AssetBundle {
     /**
      * @inheritdoc
      */

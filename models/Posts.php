@@ -9,11 +9,8 @@ use deka6pb\autoparser\components\DateTimeStampBehavior;
 use deka6pb\autoparser\components\FileFileSystem;
 use deka6pb\autoparser\components\TItemStatus;
 use deka6pb\autoparser\components\UploadedFiles;
-use Faker\Provider\File;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\db\BaseActiveRecord;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\UploadedFile;
 

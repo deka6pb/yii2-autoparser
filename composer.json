@@ -1,29 +1,35 @@
 {
-    "name": "deka6pb/yii2-autoparser",
-    "description": "Yii 2 Autoparser",
-    "keywords": ["yii2", "yii2-autoparser", "parser", "autoparser", "deka6pb"],
-    "homepahe": "https://github.com/deka6pb/yii2-autoparser",
-    "type": "yii2-extension",
-    "license": "MIT",
-    "authors": [
-      {
-        "name": "Mikhail Maklashov",
-        "email": "deka6pb@gmail.com"
-      }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-    },
-    "require-dev": {
-        "yiisoft/yii2-codeception": "~2.0",
-        "codeception/specify": "*",
-        "codeception/verify": "*",
-        "2amigos/yii2-date-picker-widget" : "~1.0",
-        "kartik-v/yii2-widget-fileinput": "*"
-    },
-    "autoload": {
-      "psr-4": {
-        "deka6pb\\autoparser\\": ""
-      }
+  "name": "deka6pb/yii2-autoparser",
+  "description": "Yii 2 Autoparser",
+  "keywords": [
+    "yii2",
+    "yii2-autoparser",
+    "parser",
+    "autoparser",
+    "deka6pb"
+  ],
+  "homepahe": "https://github.com/deka6pb/yii2-autoparser",
+  "type": "yii2-extension",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mikhail Maklashov",
+      "email": "deka6pb@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+  },
+  "require-dev": {
+    "yiisoft/yii2-codeception": "~2.0",
+    "codeception/specify": "*",
+    "codeception/verify": "*",
+    "2amigos/yii2-date-picker-widget": "~1.0",
+    "kartik-v/yii2-widget-fileinput": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "deka6pb\\autoparser\\": ""
+    }
+  }
 }

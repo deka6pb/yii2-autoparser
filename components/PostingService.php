@@ -4,7 +4,6 @@ namespace deka6pb\autoparser\components;
 use deka6pb\autoparser\components\Abstraction\IItemStatus;
 use deka6pb\autoparser\components\Abstraction\IPostDataConsumer;
 use deka6pb\autoparser\components\Abstraction\IPostingService;
-use deka6pb\autoparser\components\TItemStatus;
 use deka6pb\autoparser\models\Consumers;
 use deka6pb\autoparser\models\Posts;
 use Yii;
@@ -35,13 +34,13 @@ class PostingService implements IPostingService, IItemStatus {
     }
 
     function initConsumers() {
-        foreach($this->_consumers AS $consumer) {
+        foreach ($this->_consumers AS $consumer) {
             $component = Yii::createObject($consumer);
-            if(!($component instanceof IPostDataConsumer)) {
+            if (!($component instanceof IPostDataConsumer)) {
                 throw new Exception('This provider does not belong to the interface IPostDataProvider', 400);
             }
 
-            if((bool)$component->on != false) {
+            if ((bool)$component->on != false) {
                 $component->init();
                 $this->_enabledConsumers[] = $component;
             }
@@ -54,10 +53,10 @@ class PostingService implements IPostingService, IItemStatus {
     }
 
     function run() {
-        foreach($this->_enabledConsumers AS $consumer) {
+        foreach ($this->_enabledConsumers AS $consumer) {
             //TODO доработать приглашение юзеров
             //$consumer->SendInvites();
-            if(!empty($this->_postCollection)) {
+            if (!empty($this->_postCollection)) {
                 $consumer->SendPosts($this->_postCollection);
             }
         }
@@ -66,7 +65,7 @@ class PostingService implements IPostingService, IItemStatus {
     }
 
     function afterRun() {
-        foreach($this->_postCollection AS $post) {
+        foreach ($this->_postCollection AS $post) {
             $post->setPublished();
         }
     }
@@ -78,7 +77,7 @@ class PostingService implements IPostingService, IItemStatus {
     private function setConsumers() {
         $consumers = Consumers::find()->all();
 
-        foreach($consumers AS $objConsumer) {
+        foreach ($consumers AS $objConsumer) {
             $this->_consumers[] = $objConsumer->getOptionsToArray();
         }
     }

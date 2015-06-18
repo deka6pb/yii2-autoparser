@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($modelOptions, 'class')->dropDownList(
         Providers::getProviders()
-    );?>
+    ); ?>
 
     <?= $form->field($modelOptions, 'OAUTH_TOKEN')->textInput(['maxlength' => true]) ?>
 

@@ -15,8 +15,7 @@ class OptionsConsumer extends Options {
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return ArrayHelper::merge(parent::rules(), [
             [['APP_ID', 'APP_SECRET', 'ACCESS_TOKEN', 'CODE', 'GROUP_ID', 'ALBUM_ID'], 'required'],
             [['on'], 'integer'],
@@ -27,16 +26,15 @@ class OptionsConsumer extends Options {
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return ArrayHelper::merge(parent::attributeLabels(), [
-            'app_id' => 'App ID',
-            'app_secret' => 'App Secret',
+            'app_id'       => 'App ID',
+            'app_secret'   => 'App Secret',
             'access_token' => 'Access Token',
-            'code' => 'Code',
-            'group_id' => 'Group ID',
-            'album_id' => 'Album ID',
-            'on' => 'On',
+            'code'         => 'Code',
+            'group_id'     => 'Group ID',
+            'album_id'     => 'Album ID',
+            'on'           => 'On',
         ]);
     }
 }

@@ -19,19 +19,19 @@ class FileFileSystem {
         $info = new SplFileInfo($filePath);
 
         return [
-            'error' => [
+            'error'    => [
                 'file' => 0
             ],
-            'name' => [
+            'name'     => [
                 'file' => $info->getFilename()
             ],
-            'size' => [
+            'size'     => [
                 'file' => $info->getSize()
             ],
             'tmp_name' => [
                 'file' => $info->getPathname()
             ],
-            'type' => [
+            'type'     => [
                 'file' => 'application/' . $info->getExtension()
             ]
         ];
@@ -39,7 +39,7 @@ class FileFileSystem {
 
     public static function getFilesInfo($propertyName, $filenames) {
         $result = [];
-        foreach($filenames AS $filename) {
+        foreach ($filenames AS $filename) {
             //$filePath = self::getFilePath($filename);
             $info = new SplFileInfo($filename);
 
@@ -54,10 +54,10 @@ class FileFileSystem {
     }
 
     public static function saveFile($url, $filePath) {
-        if(empty($filePath))
+        if (empty($filePath))
             throw new ErrorException;
 
-        if(file_exists($filePath))
+        if (file_exists($filePath))
             return true;
 
         if (!copy($url, $filePath)) {
@@ -70,7 +70,7 @@ class FileFileSystem {
     public static function deleteFile($filename) {
         $filePath = self::getFilePath($filename);
 
-        if(file_exists($filePath))
+        if (file_exists($filePath))
             unlink($filePath);
     }
 

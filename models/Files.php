@@ -13,38 +13,33 @@ use Yii;
  *
  * @property Posts[] $posts
  */
-class Files extends \yii\db\ActiveRecord
-{
-    public $file;
-
+class Files extends \yii\db\ActiveRecord {
     const SCENARIO_INSERT = 'create';
     const SCENARIO_UPDATE = 'update';
+    public $file;
 
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'files';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'url'], 'required'],
             [['url'], 'string'],
             ['name', 'unique'],
             ['url', 'unique'],
             [['name'], 'string', 'max' => 256],
-            ['!file', 'file', 'extensions'=>'jpg, png, gif', 'maxSize' => 5242880],
+            ['!file', 'file', 'extensions' => 'jpg, png, gif', 'maxSize' => 5242880],
         ];
     }
 
-    public function scenarios()
-    {
+    public function scenarios() {
         return [
             'default' => ['!file'],
         ];
@@ -53,12 +48,11 @@ class Files extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
-            'id' => 'ID',
+            'id'   => 'ID',
             'name' => 'Name',
-            'url' => 'Url',
+            'url'  => 'Url',
         ];
     }
 
@@ -66,23 +60,20 @@ class Files extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPostFiles()
-    {
+    public function getPostFiles() {
         return $this->hasMany(PostFile::className(), ['post_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFiles()
-    {
+    public function getFiles() {
         return $this->hasMany(Files::className(), ['id' => 'file_id'])->viaTable('post_file', ['post_id' => 'id']);
     }
     //endregion
 
     //region Description
-    public function transactions()
-    {
+    public function transactions() {
         return [
             self::SCENARIO_INSERT => self::OP_INSERT,
             self::SCENARIO_UPDATE => self::OP_UPDATE,
@@ -91,7 +82,7 @@ class Files extends \yii\db\ActiveRecord
 
     public function stopTransaction() {
         $transaction = self::getDb()->getTransaction();
-        if($transaction)
+        if ($transaction)
             $transaction->rollback();
     }
     //endregion

@@ -2,28 +2,26 @@
 
 namespace deka6pb\autoparser\controllers;
 
+use deka6pb\autoparser\models\Consumers;
 use deka6pb\autoparser\models\OptionsConsumer;
 use Yii;
-use deka6pb\autoparser\models\Consumers;
 use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
 use yii\helpers\BaseJson;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ConsumersController implements the CRUD actions for Consumers model.
  */
-class ConsumersController extends Controller
-{
-    public $layout='main';
-    public $homeUrl='/autoparser';
+class ConsumersController extends Controller {
+    public $layout = 'main';
+    public $homeUrl = '/autoparser';
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
                 ],
@@ -35,8 +33,7 @@ class ConsumersController extends Controller
      * Lists all Consumers models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $dataProvider = new ActiveDataProvider([
             'query' => Consumers::find(),
         ]);
@@ -51,15 +48,14 @@ class ConsumersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         $model = $this->findModel($id);
         $modelOptions = new OptionsConsumer();
 
         $modelOptions->attributes = $model->getOptionsToArray();
 
         return $this->render('view', [
-            'model' => $model,
+            'model'        => $model,
             'modelOptions' => $modelOptions,
         ]);
     }
@@ -69,8 +65,7 @@ class ConsumersController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new Consumers();
         $modelOptions = new OptionsConsumer();
 
@@ -82,7 +77,7 @@ class ConsumersController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'model'        => $model,
                 'modelOptions' => $modelOptions,
             ]);
         }
@@ -94,8 +89,7 @@ class ConsumersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
         $modelOptions = new OptionsConsumer();
 
@@ -109,7 +103,7 @@ class ConsumersController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'model'        => $model,
                 'modelOptions' => $modelOptions,
             ]);
         }
@@ -121,8 +115,7 @@ class ConsumersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -135,8 +128,7 @@ class ConsumersController extends Controller
      * @return Consumers the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = Consumers::findOne($id)) !== null) {
             return $model;
         } else {

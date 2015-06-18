@@ -1,6 +1,5 @@
 <?php
 
-use deka6pb\autoparser\components\FileFileSystem;
 use kartik\file\FileInput;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -19,15 +18,15 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
-            'data' => [
+            'data'  => [
                 'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
+                'method'  => 'post',
             ],
         ]) ?>
     </p>
 
     <?= DetailView::widget([
-        'model' => $model,
+        'model'      => $model,
         'attributes' => [
             'id',
             'type',
@@ -43,16 +42,16 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <?php echo FileInput::widget([
-        'name' => 'files',
-        "disabled" => true,
-        'options' => [
-            'accept' => 'image/*',
+        'name'          => 'files',
+        "disabled"      => true,
+        'options'       => [
+            'accept'   => 'image/*',
             'multiple' => true,
         ],
         'pluginOptions' => [
             "allowedFileExtensions" => ["jpg", "png", "gif"],
-            'initialPreview'=>$model->getHtmlImagesArray(),
-            'overwriteInitial'=>false,
+            'initialPreview'        => $model->getHtmlImagesArray(),
+            'overwriteInitial'      => false,
         ]
     ]) ?>
 

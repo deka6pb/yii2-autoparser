@@ -1,12 +1,10 @@
 <?php
 
-use yii\db\Schema;
 use yii\db\Migration;
+use yii\db\Schema;
 
-class m150603_103359_create_post_file_table extends Migration
-{
-    public function up()
-    {
+class m150603_103359_create_post_file_table extends Migration {
+    public function up() {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
@@ -22,8 +20,7 @@ class m150603_103359_create_post_file_table extends Migration
         $this->addForeignKey('post', '{{%post_file}}', 'post_id', '{{%posts}}', 'id', 'CASCADE', 'CASCADE');
     }
 
-    public function down()
-    {
+    public function down() {
         echo "m150603_103359_create_post_file_table cannot be reverted.\n";
 
         $this->dropTable('{{%post_file}}');

@@ -1,9 +1,9 @@
-$(document).ready(function(){
+$(document).ready(function () {
     var postType = {
-        "NaN"   : "Nan",
-        "txt"   : 1,
-        "pic"   : 2,
-        "gif"   : 3
+        "NaN": "Nan",
+        "txt": 1,
+        "pic": 2,
+        "gif": 3
     };
 
     $("#input-ru").fileinput({
@@ -12,27 +12,25 @@ $(document).ready(function(){
         allowedFileExtensions: ["jpg", "png", "gif"]
     });
 
-    $("#posts-type").on("change", function() {
+    $("#posts-type").on("change", function () {
         var
             btn = $(this),
-            item = {
-
-            },
+            item = {},
             ctrl = {
-                'files' : $('#posts-uploadfiles'),
-                'text'  : $('#posts-text'),
-                'tags'  : $('#posts-tags')
+                'files': $('#posts-uploadfiles'),
+                'text': $('#posts-text'),
+                'tags': $('#posts-tags')
             },
             handler = {
-                init: function(){
+                init: function () {
                     var type = parseInt(btn.val());
 
-                    if(isNaN(type)) {
+                    if (isNaN(type)) {
                         handler.filesToggle("disable");
                         return;
                     }
 
-                    switch(parseInt(btn.val())) {
+                    switch (parseInt(btn.val())) {
                         case postType.txt:
                             handler.filesToggle("disable");
                             break;
@@ -42,7 +40,7 @@ $(document).ready(function(){
                             break;
                     }
                 },
-                filesToggle:function(value){
+                filesToggle: function (value) {
                     ctrl.files.fileinput("clear");
                     ctrl.files.fileinput(value);
                 }

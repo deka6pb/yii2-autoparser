@@ -10,8 +10,7 @@ abstract class Options extends Model {
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'class'], 'required'],
             [['name', 'class'], 'string', 'max' => 255]
@@ -21,10 +20,9 @@ abstract class Options extends Model {
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
-            'name' => 'Name',
+            'name'  => 'Name',
             'class' => 'Type',
         ];
     }
