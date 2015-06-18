@@ -10,33 +10,54 @@ class FileFileSystem {
         return \Yii::getAlias(Yii::$app->controller->module->getTmpDir()) . DIRECTORY_SEPARATOR . $name;
     }
 
+    public static function getFileUrl($name) {
+        return \Yii::getAlias(Yii::$app->controller->module->getUploadedUrl()) . DIRECTORY_SEPARATOR . $name;
+    }
+
     public static function getFileInfo($filename) {
         $filePath = self::getFilePath($filename);
         $info = new SplFileInfo($filePath);
 
         return [
-            'error' => [
+            'error'    => [
                 'file' => 0
             ],
-            'name' => [
+            'name'     => [
                 'file' => $info->getFilename()
             ],
-            'size' => [
+            'size'     => [
                 'file' => $info->getSize()
             ],
             'tmp_name' => [
                 'file' => $info->getPathname()
             ],
-            'type' => [
+            'type'     => [
                 'file' => 'application/' . $info->getExtension()
             ]
         ];
     }
+
+    public static function getFilesInfo($propertyName, $filenames) {
+        $result = [];
+        foreach ($filenames AS $filename) {
+            //$filePath = self::getFilePath($filename);
+            $info = new SplFileInfo($filename);
+
+            $result['error'][$propertyName][] = 0;
+            $result['name'][$propertyName][] = $info->getFilename();
+            $result['size'][$propertyName][] = (!empty($info->getSize)) ? $info->getSize() : 0;
+            $result['tmp_name'][$propertyName][] = $info->getPathname();
+            $result['type'][$propertyName][] = 'application/' . $info->getExtension();
+        }
+
+        return $result;
+    }
+
     public static function saveFile($url, $filePath) {
-        if(empty($filePath))
+        if (empty($filePath))
             throw new ErrorException;
 
-        if(file_exists($filePath))
+        if (file_exists($filePath))
             return true;
 
         if (!copy($url, $filePath)) {
@@ -49,7 +70,7 @@ class FileFileSystem {
     public static function deleteFile($filename) {
         $filePath = self::getFilePath($filename);
 
-        if(file_exists($filePath))
+        if (file_exists($filePath))
             unlink($filePath);
     }
 

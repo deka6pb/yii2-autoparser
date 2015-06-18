@@ -13,24 +13,21 @@ use Yii;
  * @property Files $file
  * @property Posts $post
  */
-class PostFile extends \yii\db\ActiveRecord
-{
+class PostFile extends \yii\db\ActiveRecord {
     const SCENARIO_INSERT = 'create';
     const SCENARIO_UPDATE = 'update';
 
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'post_file';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['post_id', 'file_id'], 'required'],
             [['post_id', 'file_id'], 'integer'],
@@ -41,8 +38,7 @@ class PostFile extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'post_id' => 'Post ID',
             'file_id' => 'File ID',
@@ -53,23 +49,20 @@ class PostFile extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getFile()
-    {
+    public function getFile() {
         return $this->hasOne(Files::className(), ['id' => 'file_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPost()
-    {
+    public function getPost() {
         return $this->hasOne(Posts::className(), ['id' => 'post_id']);
     }
     //endregion
 
     //region Transaction
-    public function transactions()
-    {
+    public function transactions() {
         return [
             self::SCENARIO_INSERT => self::OP_INSERT,
             self::SCENARIO_UPDATE => self::OP_UPDATE,
@@ -78,7 +71,7 @@ class PostFile extends \yii\db\ActiveRecord
 
     public function stopTransaction() {
         $transaction = self::getDb()->getTransaction();
-        if($transaction)
+        if ($transaction)
             $transaction->rollback();
     }
     //endregion

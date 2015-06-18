@@ -13,16 +13,15 @@ class DateTimeStampBehavior extends AttributeBehavior {
 
     public $value;
 
-    protected function getValue($event)
-    {
+    protected function getValue($event) {
         if ($this->value instanceof Expression) {
             return $this->value;
         } else {
             return $this->value !== null ? call_user_func($this->value, $event) : new Expression("NOW()");
         }
     }
-    public function touch($attribute)
-    {
-        $this->owner->updateAttributes(array_fill_keys((array) $attribute, $this->getValue(null)));
+
+    public function touch($attribute) {
+        $this->owner->updateAttributes(array_fill_keys((array)$attribute, $this->getValue(null)));
     }
 }

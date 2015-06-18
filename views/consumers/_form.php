@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($modelOptions, 'class')->dropDownList(
         Consumers::getConsumers()
-    );?>
+    ); ?>
 
     <?= $form->field($modelOptions, 'APP_ID')->textInput(['maxlength' => true]) ?>
 

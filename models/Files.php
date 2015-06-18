@@ -1,32 +1,89 @@
 <?php
+
 namespace deka6pb\autoparser\models;
 
-use deka6pb\autoparser\components\FileFileSystem;
-use yii\web\UploadedFile;
+use Yii;
 
-class Files extends FileDB {
-    public function save($runValidation = true, $attributeNames = null)
-    {
-        $filePath = FileFileSystem::getFilePath($this->name);
+/**
+ * This is the model class for table "files".
+ *
+ * @property integer $id
+ * @property string $name
+ * @property string $url
+ *
+ * @property Posts[] $posts
+ */
+class Files extends \yii\db\ActiveRecord {
+    const SCENARIO_INSERT = 'create';
+    const SCENARIO_UPDATE = 'update';
+    public $file;
 
-        if(FileFileSystem::saveFile($this->url, $filePath) === false)
-            return false;
-
-        $classInfo = FileFileSystem::parseClassname(get_class($this));
-        $_FILES[$classInfo['classname']] = FileFileSystem::getFileInfo($this->name);
-
-        $this->file = UploadedFile::getInstance($this, 'file');
-
-        if( !$this->validate() || !$this->file ) {
-            if(file_exists($filePath))
-                unlink($filePath);
-            return false;
-        }
-
-        return parent::save($runValidation, $attributeNames);
+    /**
+     * @inheritdoc
+     */
+    public static function tableName() {
+        return 'files';
     }
 
-    public function delete() {
-        FileFileSystem::deleteFile($this->name);
+    /**
+     * @inheritdoc
+     */
+    public function rules() {
+        return [
+            [['name', 'url'], 'required'],
+            [['url'], 'string'],
+            ['name', 'unique'],
+            ['url', 'unique'],
+            [['name'], 'string', 'max' => 256],
+            ['!file', 'file', 'extensions' => 'jpg, png, gif', 'maxSize' => 5242880],
+        ];
     }
+
+    public function scenarios() {
+        return [
+            'default' => ['!file'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels() {
+        return [
+            'id'   => 'ID',
+            'name' => 'Name',
+            'url'  => 'Url',
+        ];
+    }
+
+    //region Relations
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPostFiles() {
+        return $this->hasMany(PostFile::className(), ['post_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFiles() {
+        return $this->hasMany(Files::className(), ['id' => 'file_id'])->viaTable('post_file', ['post_id' => 'id']);
+    }
+    //endregion
+
+    //region Description
+    public function transactions() {
+        return [
+            self::SCENARIO_INSERT => self::OP_INSERT,
+            self::SCENARIO_UPDATE => self::OP_UPDATE,
+        ];
+    }
+
+    public function stopTransaction() {
+        $transaction = self::getDb()->getTransaction();
+        if ($transaction)
+            $transaction->rollback();
+    }
+    //endregion
 }

@@ -4,15 +4,12 @@ namespace deka6pb\autoparser\models;
 
 use yii\helpers\ArrayHelper;
 
-class Text extends Posts
-{
+class Text extends Posts {
     public $type = self::TYPE_TEXT;
 
-    public function rules()
-    {
+    public function rules() {
         return ArrayHelper::merge(parent::rules(), [
             ['text', 'required'],
-            ['text', 'string', 'max'=> 15895],
         ]);
     }
 }

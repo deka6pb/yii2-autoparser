@@ -6,11 +6,10 @@ use deka6pb\autoparser\components\Abstraction\APostDataConsumerBase;
 use deka6pb\autoparser\components\FileFileSystem;
 use deka6pb\autoparser\components\PostingException;
 use deka6pb\autoparser\models\Posts;
-use yii\authclient\clients\VKontakte;
 use Yii;
+use yii\authclient\clients\VKontakte;
 use yii\authclient\OAuthToken;
 use yii\base\ErrorException;
-use yii\base\Exception;
 
 class VkConsumer extends APostDataConsumerBase {
 
@@ -26,16 +25,16 @@ class VkConsumer extends APostDataConsumerBase {
             'token' => $this->ACCESS_TOKEN
         ]);
         $this->client = new VKontakte([
-            'accessToken' => $token,
-            'clientId' => $this->APP_ID,
+            'accessToken'  => $token,
+            'clientId'     => $this->APP_ID,
             'clientSecret' => $this->APP_SECRET
         ]);
     }
 
     function SendPosts($data) {
-        try{
-            foreach($data AS $post) {
-                if(!($post instanceof Posts)) {
+        try {
+            foreach ($data AS $post) {
+                if (!($post instanceof Posts)) {
                     throw new ErrorException('This post does not belong to the class Media', 400);
                 }
 
@@ -51,7 +50,7 @@ class VkConsumer extends APostDataConsumerBase {
                         break;
                 }
             }
-        } catch(ErrorException $e) {
+        } catch (ErrorException $e) {
             throw new PostingException($e->getMessage(), $e->getCode(), $post);
         }
     }
@@ -59,13 +58,13 @@ class VkConsumer extends APostDataConsumerBase {
     //region SendTypes
     private function SendText($post) {
         $attachment = "";
-        if(!empty($post->url))
+        if (!empty($post->url))
             $attachment = $post->url;
 
         $this->client->api('wall.post', 'POST', [
-            'owner_id' => -$this->GROUP_ID,
-            'message' => $post->text,
-            'from_group' => 1,
+            'owner_id'    => -$this->GROUP_ID,
+            'message'     => $post->text,
+            'from_group'  => 1,
             'attachments' => $attachment
         ]);
     }
@@ -75,13 +74,13 @@ class VkConsumer extends APostDataConsumerBase {
             'gid' => $this->GROUP_ID
         ]);
         $result = [];
-        foreach($post->files AS $file) {
+        foreach ($post->files AS $file) {
             $post_params['file'] = new CurlFile(FileFileSystem::getFilePath($file->name), 'text/html');
             $upload = $this->saveFile($uploadServer, $post_params);
 
             $result[] = $this->client->api('docs.save', "POST", [
                 'file' => $upload->file,
-                'gid' => $this->GROUP_ID,
+                'gid'  => $this->GROUP_ID,
             ]);
         }
 
@@ -97,20 +96,20 @@ class VkConsumer extends APostDataConsumerBase {
         }
 
         $attache_array = [];
-        foreach($result AS $v) {
+        foreach ($result AS $v) {
             $attache_array[] = "doc{$v['response'][0]['owner_id']}_{$v['response'][0]['did']}";
         }
 
-        if(!empty($post->url))
+        if (!empty($post->url))
             $attache_array[] = $post->url;
 
         $attachments = implode(",", $attache_array);
 
         $response = $this->client->api('wall.post', "POST",
             [
-                'owner_id' => -$this->GROUP_ID,
-                'from_group' => 1,
-                'message' => $text,
+                'owner_id'    => -$this->GROUP_ID,
+                'from_group'  => 1,
+                'message'     => $text,
                 'attachments' => "$attachments",
             ]);
 
@@ -123,15 +122,15 @@ class VkConsumer extends APostDataConsumerBase {
         ]);
 
         $result = [];
-        foreach($post->files AS $file) {
+        foreach ($post->files AS $file) {
             $post_params['photo'] = new CurlFile(FileFileSystem::getFilePath($file->name), 'text/html');
             $upload = $this->saveFile($uploadServer, $post_params);
 
             $result[] = $this->client->api('photos.saveWallPhoto', "POST", [
                 'server' => $upload->server,
-                'photo' => $upload->photo,
-                'hash' => $upload->hash,
-                'gid' => $this->GROUP_ID,
+                'photo'  => $upload->photo,
+                'hash'   => $upload->hash,
+                'gid'    => $this->GROUP_ID,
             ]);
         }
 
@@ -147,46 +146,47 @@ class VkConsumer extends APostDataConsumerBase {
         }
 
         $attache_array = [];
-        foreach($result AS $v) {
+        foreach ($result AS $v) {
             $attache_array[] = $v['response'][0]['id'];
         }
 
-        if(!empty($post->url))
+        if (!empty($post->url))
             $attache_array[] = $post->url;
 
         $attachments = implode(",", $attache_array);
 
         $response = $this->client->api('wall.post', "POST",
             [
-                'owner_id' => -$this->GROUP_ID,
-                'from_group' => 1,
-                'message' => $text,
+                'owner_id'    => -$this->GROUP_ID,
+                'from_group'  => 1,
+                'message'     => $text,
                 'attachments' => "$attachments", // uploaded image is passed as attachment
 
             ]);
 
         return isset($response['response']['post_id']);
     }
+
     //endregion
 
     function SendInvites() {
         $invitedUsers = $this->client->api('groups.getInvitedUsers', 'GET', [
             'group_id' => $this->GROUP_ID,
-            'count' => 20,
-            'fields' => 'nickname',
+            'count'    => 20,
+            'fields'   => 'nickname',
         ]);
 
         $users = $this->client->api('users.search', 'GET', [
-            'q' => '',
+            'q'      => '',
             'fields' => 'uid',
-            'count' => '200',
+            'count'  => '200',
         ]);
 
-        foreach($users['response'] AS $user) {
-            if(!empty($user['uid'])) {
+        foreach ($users['response'] AS $user) {
+            if (!empty($user['uid'])) {
                 $this->client->api('groups.invite', 'GET', [
                     'group_id' => $this->GROUP_ID,
-                    'user_id' => $user['uid'],
+                    'user_id'  => $user['uid'],
                 ]);
             }
 
@@ -207,7 +207,7 @@ class VkConsumer extends APostDataConsumerBase {
 
         curl_close($ch);
 
-        if(!empty($errorNumber)) {
+        if (!empty($errorNumber)) {
             throw new ErrorException($errorMessage, $errorNumber);
         }
 

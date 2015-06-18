@@ -12,21 +12,24 @@ use yii\helpers\BaseJson;
  * @property string $name
  * @property string $options
  */
-class Providers extends \yii\db\ActiveRecord
-{
+class Providers extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'providers';
+    }
+
+    public static function getProviders() {
+        $local = Yii::$app->controller->module->getProviders();
+
+        return Yii::$app->controller->module->getProviders();
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name', 'options'], 'required'],
             [['options'], 'string'],
@@ -37,18 +40,12 @@ class Providers extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
+            'id'      => 'ID',
+            'name'    => 'Name',
             'options' => 'Options',
         ];
-    }
-
-    public static function getProviders() {
-        $local = Yii::$app->controller->module->getProviders();
-        return Yii::$app->controller->module->getProviders();
     }
 
     public function getOptionsToArray() {

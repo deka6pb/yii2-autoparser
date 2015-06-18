@@ -12,8 +12,7 @@ class OptionsProvider extends Options {
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return ArrayHelper::merge(parent::rules(), [
             [['count', 'OAUTH_TOKEN'], 'required'],
             [['count', 'on'], 'integer'],
@@ -24,13 +23,12 @@ class OptionsProvider extends Options {
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return ArrayHelper::merge(parent::attributeLabels(), [
             'OAUTH_TOKEN' => 'Token',
-            'count' => 'Count',
-            'homepage' => 'Homepage',
-            'on' => 'On',
+            'count'       => 'Count',
+            'homepage'    => 'Homepage',
+            'on'          => 'On',
         ]);
     }
 }
