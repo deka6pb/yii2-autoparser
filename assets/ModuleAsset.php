@@ -11,7 +11,7 @@ class ModuleAsset extends AssetBundle
     public $sourcePath = '@deka6pb/autoparser/assets';
 
     public $css = [
-
+        'css/main.css',
     ];
     public $js = [
         'js/main.js',

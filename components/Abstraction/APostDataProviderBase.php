@@ -51,7 +51,7 @@ abstract class APostDataProviderBase implements IPostDataProvider {
             $file->url = $url;
             $file->name = basename($url);
             if($file->validate())
-                $post->files = $file;
+                $post->uploadFiles[] = $file;
         }
 
         $post->setAttributes($attributes);
@@ -68,6 +68,7 @@ abstract class APostDataProviderBase implements IPostDataProvider {
 
     public function typeGif($attributes, $urls) {
         $post = new Gif();
+
         $post->setScenario($post::SCENARIO_INSERT);
 
         foreach($urls AS $url) {
@@ -75,7 +76,7 @@ abstract class APostDataProviderBase implements IPostDataProvider {
             $file->url = $url;
             $file->name = basename($url);
             if($file->validate()) {
-                $post->files = $file;
+                $post->uploadFiles[] = $file;
             }
         }
 

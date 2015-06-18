@@ -10,6 +10,10 @@ class FileFileSystem {
         return \Yii::getAlias(Yii::$app->controller->module->getTmpDir()) . DIRECTORY_SEPARATOR . $name;
     }
 
+    public static function getFileUrl($name) {
+        return \Yii::getAlias(Yii::$app->controller->module->getUploadedUrl()) . DIRECTORY_SEPARATOR . $name;
+    }
+
     public static function getFileInfo($filename) {
         $filePath = self::getFilePath($filename);
         $info = new SplFileInfo($filePath);

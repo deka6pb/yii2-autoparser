@@ -1,5 +1,7 @@
 <?php
 
+use deka6pb\autoparser\components\FileFileSystem;
+use kartik\file\FileInput;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -11,7 +13,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="posts-view">
-
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
@@ -40,5 +41,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'url:url',
         ],
     ]) ?>
+
+    <?php echo FileInput::widget([
+        'name' => 'files',
+        "disabled" => true,
+        'options' => [
+            'accept' => 'image/*',
+            'multiple' => true,
+        ],
+        'pluginOptions' => [
+            "allowedFileExtensions" => ["jpg", "png", "gif"],
+            'initialPreview'=>$model->getHtmlImagesArray(),
+            'overwriteInitial'=>false,
+        ]
+    ]) ?>
+
 
 </div>

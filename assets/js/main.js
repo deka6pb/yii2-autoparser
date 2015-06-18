@@ -6,6 +6,12 @@ $(document).ready(function(){
         "gif"   : 3
     };
 
+    $("#input-ru").fileinput({
+        language: "ru",
+        uploadUrl: "http://localhost/site/file-upload-batch",
+        allowedFileExtensions: ["jpg", "png", "gif"]
+    });
+
     $("#posts-type").on("change", function() {
         var
             btn = $(this),
@@ -13,7 +19,7 @@ $(document).ready(function(){
 
             },
             ctrl = {
-                'url'   : $('#posts-url'),
+                'files' : $('#posts-uploadfiles'),
                 'text'  : $('#posts-text'),
                 'tags'  : $('#posts-tags')
             },
@@ -22,34 +28,23 @@ $(document).ready(function(){
                     var type = parseInt(btn.val());
 
                     if(isNaN(type)) {
-                        handler.disabled(true);
+                        handler.filesToggle("disable");
                         return;
                     }
-                    handler.disabled(false);
 
                     switch(parseInt(btn.val())) {
                         case postType.txt:
-                            ctrl.url.attr("disabled", true);
+                            handler.filesToggle("disable");
                             break;
                         case postType.pic:
                         case postType.gif:
-                            ctrl.url.removeAttr("disabled");
+                            handler.filesToggle("enable");
                             break;
                     }
                 },
-                change:function(){
-                    ctrl.url.attr("disabled", true);
-                },
-                disabled:function(value) {
-                    if(value) {
-                        ctrl.url.attr("disabled", true);
-                        ctrl.text.attr("disabled", true);
-                        ctrl.tags.attr("disabled", true);
-                    } else {
-                        ctrl.url.removeAttr("disabled");
-                        ctrl.text.removeAttr("disabled");
-                        ctrl.tags.removeAttr("disabled");
-                    }
+                filesToggle:function(value){
+                    ctrl.files.fileinput("clear");
+                    ctrl.files.fileinput(value);
                 }
             };
 
