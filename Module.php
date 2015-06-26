@@ -15,7 +15,9 @@ class Module extends \yii\base\Module {
     private $_providers = [];
     private $_consumers = [];
     private $defaultConsumersClasses = [
-        'deka6pb\autoparser\components\Concrete\Consumers\VkConsumer' => 'Vk'
+        'deka6pb\autoparser\components\Concrete\Consumers\VkConsumer' => 'Vkontakte',
+        'deka6pb\autoparser\components\Concrete\Consumers\FbConsumer' => 'Facebook',
+        'deka6pb\autoparser\components\Concrete\Consumers\OkConsumer' => 'Odnoklassniki',
     ];
     private $defaultProvidersClasses = [];
 
