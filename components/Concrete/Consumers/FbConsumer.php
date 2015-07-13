@@ -59,12 +59,9 @@ class FbConsumer extends APostDataConsumerBase {
         if (!empty($post->url))
             $attachment = $post->url;
 
-        $this->client->api('/me', 'GET');
-        $data = $this->client->api("/me/accounts");
-
-        /*$this->client->api('/318031398386432/feed', 'POST', [
+        $this->client->api('/318031398386432/feed', 'POST', [
             'message'    => 'dfsgh',
-        ]);*/
+        ]);
     }
 
     private function SendGif($post) {
