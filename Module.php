@@ -4,8 +4,7 @@ namespace deka6pb\autoparser;
 
 class Module extends \yii\base\Module {
     public $controllerNamespace = 'deka6pb\autoparser\controllers';
-    public $tmpDir = "@webroot/images";
-    public $uploadedUrl = "@web/images";
+    public $tmpDir = "images";
     public $postingCount = 1;
     public $collectionCount = 1;
     public $userConsumersClasses = [];
@@ -56,10 +55,6 @@ class Module extends \yii\base\Module {
 
     public function getTmpDir() {
         return $this->tmpDir;
-    }
-
-    public function getUploadedUrl() {
-        return $this->uploadedUrl;
     }
 
     public function getUserConsumersClasses() {

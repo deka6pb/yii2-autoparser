@@ -6,7 +6,6 @@ use deka6pb\autoparser\components\Abstraction\IDataTimeFormats;
 use deka6pb\autoparser\components\Abstraction\IItemStatus;
 use deka6pb\autoparser\components\Abstraction\IItemType;
 use deka6pb\autoparser\components\DateTimeStampBehavior;
-use deka6pb\autoparser\components\FileFileSystem;
 use deka6pb\autoparser\components\TItemStatus;
 use deka6pb\autoparser\components\UploadedFiles;
 use Yii;
@@ -108,7 +107,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
                     BaseActiveRecord::EVENT_BEFORE_INSERT => 'created',
                     BaseActiveRecord::EVENT_BEFORE_UPDATE => 'published',
                 ]
-            ]
+            ],
         ];
     }
 
@@ -251,11 +250,13 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
     public function beforeSave($insert) {
         $urls = [];
         if (!empty($this->uploadFiles)) {
+            $fileModel = new Files();
             foreach ($this->uploadFiles AS $file) {
                 $urls[] = $file->url;
             }
-            $classInfo = FileFileSystem::parseClassname(get_class($this));
-            $_FILES[$classInfo['classname']] = FileFileSystem::getFilesInfo('uploadFiles', $urls);
+
+            $classInfo = $fileModel->parseClassname($this);
+            $_FILES[$classInfo["classname"]] = $fileModel->getFilesInfo('uploadFiles', $urls);
         }
 
         return parent::beforeSave($insert);
@@ -285,12 +286,11 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
                 $file->delete();
             }
             foreach ($this->uploadFiles as $file) {
-                $filename = $file->baseName . '.' . $file->extension;
-                $file->saveAs(FileFileSystem::getFilePath($filename));
-
                 $fileModel = new Files();
                 $fileModel->name = $file->name;
-                $fileModel->url = FileFileSystem::getFileUrl($file->name);
+                $fileModel->url = $fileModel->fileUrl;
+
+                $file->saveAs($fileModel->filePath);
 
                 if (!$fileModel->save()) {
                     $file->stopTransaction();

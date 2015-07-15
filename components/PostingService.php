@@ -9,9 +9,7 @@ use deka6pb\autoparser\models\Posts;
 use Yii;
 use yii\base\Exception;
 
-class PostingService implements IPostingService, IItemStatus {
-
-    use TItemStatus;
+class PostingService implements IPostingService {
 
     private $_consumers = [];
     private $_enabledConsumers = [];
@@ -35,6 +33,8 @@ class PostingService implements IPostingService, IItemStatus {
 
     function initConsumers() {
         foreach ($this->_consumers AS $consumer) {
+            if(!class_exists($consumer["class"]))
+                continue;
             $component = Yii::createObject($consumer);
             if (!($component instanceof IPostDataConsumer)) {
                 throw new Exception('This provider does not belong to the interface IPostDataProvider', 400);

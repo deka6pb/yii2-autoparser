@@ -3,7 +3,6 @@ namespace deka6pb\autoparser\components\Concrete\Consumers;
 
 use CURLFile;
 use deka6pb\autoparser\components\Abstraction\APostDataConsumerBase;
-use deka6pb\autoparser\components\FileFileSystem;
 use deka6pb\autoparser\components\PostingException;
 use deka6pb\autoparser\models\Posts;
 use Yii;
@@ -75,7 +74,7 @@ class VkConsumer extends APostDataConsumerBase {
         ]);
         $result = [];
         foreach ($post->files AS $file) {
-            $post_params['file'] = new CurlFile(FileFileSystem::getFilePath($file->name), 'text/html');
+            $post_params['file'] = new CurlFile($file->filePath, 'text/html');
             $upload = $this->saveFile($uploadServer, $post_params);
 
             $result[] = $this->client->api('docs.save', "POST", [
@@ -123,7 +122,7 @@ class VkConsumer extends APostDataConsumerBase {
 
         $result = [];
         foreach ($post->files AS $file) {
-            $post_params['photo'] = new CurlFile(FileFileSystem::getFilePath($file->name), 'text/html');
+            $post_params['photo'] = new CurlFile($file->filePath, 'text/html');
             $upload = $this->saveFile($uploadServer, $post_params);
 
             $result[] = $this->client->api('photos.saveWallPhoto', "POST", [

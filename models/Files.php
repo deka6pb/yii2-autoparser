@@ -2,6 +2,7 @@
 
 namespace deka6pb\autoparser\models;
 
+use deka6pb\autoparser\behaviors\FileBehavior;
 use Yii;
 
 /**
@@ -53,6 +54,16 @@ class Files extends \yii\db\ActiveRecord {
             'id'   => 'ID',
             'name' => 'Name',
             'url'  => 'Url',
+        ];
+    }
+
+    public function behaviors() {
+        return [
+            'FileBehavior' => [
+                'class'     => FileBehavior::className(),
+                'attribute' => 'name',
+                'path'      => Yii::$app->controller->module->getTmpDir()
+            ]
         ];
     }
 
