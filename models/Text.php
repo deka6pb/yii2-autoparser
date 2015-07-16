@@ -9,7 +9,7 @@ class Text extends Posts {
 
     public function rules() {
         return ArrayHelper::merge(parent::rules(), [
-            ['text', 'required'],
+            ['text', 'required']
         ]);
     }
 }

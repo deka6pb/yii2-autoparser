@@ -1,5 +1,5 @@
 <?php
-namespace deka6pb\autoparser\components\Abstraction;
+namespace deka6pb\autoparser\components\CollectorService\Abstraction;
 
 use deka6pb\autoparser\models\Files;
 use deka6pb\autoparser\models\Gif;

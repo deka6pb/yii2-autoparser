@@ -1,27 +1,18 @@
 <?php
-namespace deka6pb\autoparser\components;
+namespace deka6pb\autoparser\components\PostingService\Abstraction;
 
-use deka6pb\autoparser\components\Abstraction\IItemStatus;
-use deka6pb\autoparser\components\Abstraction\IPostDataConsumer;
-use deka6pb\autoparser\components\Abstraction\IPostingService;
 use deka6pb\autoparser\models\Consumers;
 use deka6pb\autoparser\models\Posts;
 use Yii;
 use yii\base\Exception;
 
-class PostingService implements IPostingService {
-
+abstract class APostingService implements IPostingService{
     private $_consumers = [];
     private $_enabledConsumers = [];
     private $_postCollection = [];
     private $_count;
 
-    public function __construct() {
-        $this->setConsumers();
-        $this->init();
-    }
-
-    function init() {
+    public function init() {
         $this->_count = (!empty(Yii::$app->controller->module->getMaxCountPosting())) ? Yii::$app->controller->module->getMaxCountPosting() : null;
         $this->initConsumers();
         $this->initPostCollection();
@@ -31,10 +22,12 @@ class PostingService implements IPostingService {
         $this->_count = $value;
     }
 
-    function initConsumers() {
+    public function initConsumers() {
         foreach ($this->_consumers AS $consumer) {
-            if(!class_exists($consumer["class"]))
+            if (!class_exists($consumer["class"])) {
                 continue;
+            }
+
             $component = Yii::createObject($consumer);
             if (!($component instanceof IPostDataConsumer)) {
                 throw new Exception('This provider does not belong to the interface IPostDataProvider', 400);
@@ -47,14 +40,14 @@ class PostingService implements IPostingService {
         }
     }
 
-    function initPostCollection() {
+    public function initPostCollection() {
         $model = new Posts();
         $this->_postCollection = $model->getNewPosts($this->_count);
     }
 
-    function run() {
+    public function run() {
         foreach ($this->_enabledConsumers AS $consumer) {
-            //TODO Ð´Ð¾Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ñ‚ÑŒ Ð¿Ñ€Ð¸Ð³Ð»Ð°ÑˆÐµÐ½Ð¸Ðµ ÑŽÐ·ÐµÑ€Ð¾Ð²
+            //TODO äîðàáîòàòü ïðèãëàøåíèå þçåðîâ
             //$consumer->SendInvites();
             if (!empty($this->_postCollection)) {
                 $consumer->SendPosts($this->_postCollection);
@@ -64,17 +57,17 @@ class PostingService implements IPostingService {
         $this->afterRun();
     }
 
-    function afterRun() {
+    public function afterRun() {
         foreach ($this->_postCollection AS $post) {
             $post->setPublished();
         }
     }
 
-    function getPostCollection() {
+    public function getPostCollection() {
         return $this->_postCollection;
     }
 
-    private function setConsumers() {
+    public function setConsumers() {
         $consumers = Consumers::find()->all();
 
         foreach ($consumers AS $objConsumer) {

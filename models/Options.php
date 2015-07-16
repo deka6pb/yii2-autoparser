@@ -23,7 +23,7 @@ abstract class Options extends Model {
     public function attributeLabels() {
         return [
             'name'  => 'Name',
-            'class' => 'Type',
+            'class' => 'Type'
         ];
     }
 

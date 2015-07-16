@@ -3,6 +3,7 @@
 namespace deka6pb\autoparser\models;
 
 use deka6pb\autoparser\behaviors\FileBehavior;
+use deka6pb\autoparser\components\Abstraction\ATransactionModel;
 use Yii;
 
 /**
@@ -14,9 +15,7 @@ use Yii;
  *
  * @property Posts[] $posts
  */
-class Files extends \yii\db\ActiveRecord {
-    const SCENARIO_INSERT = 'create';
-    const SCENARIO_UPDATE = 'update';
+class Files extends ATransactionModel {
     public $file;
 
     /**
@@ -42,7 +41,7 @@ class Files extends \yii\db\ActiveRecord {
 
     public function scenarios() {
         return [
-            'default' => ['!file'],
+            'default' => ['!file']
         ];
     }
 
@@ -57,6 +56,9 @@ class Files extends \yii\db\ActiveRecord {
         ];
     }
 
+    /**
+     * @return array
+     */
     public function behaviors() {
         return [
             'FileBehavior' => [
@@ -80,21 +82,6 @@ class Files extends \yii\db\ActiveRecord {
      */
     public function getFiles() {
         return $this->hasMany(Files::className(), ['id' => 'file_id'])->viaTable('post_file', ['post_id' => 'id']);
-    }
-    //endregion
-
-    //region Description
-    public function transactions() {
-        return [
-            self::SCENARIO_INSERT => self::OP_INSERT,
-            self::SCENARIO_UPDATE => self::OP_UPDATE,
-        ];
-    }
-
-    public function stopTransaction() {
-        $transaction = self::getDb()->getTransaction();
-        if ($transaction)
-            $transaction->rollback();
     }
     //endregion
 }

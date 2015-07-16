@@ -2,10 +2,11 @@
 
 namespace deka6pb\autoparser\models;
 
+use deka6pb\autoparser\behaviors\DateTimeStampBehavior;
+use deka6pb\autoparser\components\Abstraction\ATransactionModel;
 use deka6pb\autoparser\components\Abstraction\IDataTimeFormats;
 use deka6pb\autoparser\components\Abstraction\IItemStatus;
 use deka6pb\autoparser\components\Abstraction\IItemType;
-use deka6pb\autoparser\components\DateTimeStampBehavior;
 use deka6pb\autoparser\components\TItemStatus;
 use deka6pb\autoparser\components\UploadedFiles;
 use Yii;
@@ -31,16 +32,13 @@ use yii\web\UploadedFile;
  * @property Files[] $files
  * @property Files $postFile
  */
-class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDataTimeFormats {
+class Posts extends ATransactionModel implements IItemStatus, IItemType, IDataTimeFormats {
     use TItemStatus;
 
     /**
      * @var UploadedFile[]
      */
     public $uploadFiles = [];
-
-    const SCENARIO_INSERT = 'create';
-    const SCENARIO_UPDATE = 'update';
 
     const DEFAULT_TYPE = 'Manually';
 
@@ -75,11 +73,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
     }
 
     protected function addCondition($query, $attribute, $partialMatch = false) {
-        if (($pos = strrpos($attribute, '.')) !== false) {
-            $modelAttribute = substr($attribute, $pos + 1);
-        } else {
-            $modelAttribute = $attribute;
-        }
+        $modelAttribute = ($pos = strrpos($attribute, '.')) !== false ? substr($attribute, $pos + 1) : $attribute;
 
         $value = $this->$modelAttribute;
         if (trim($value) === '') {
@@ -105,7 +99,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
                 'class'      => DateTimeStampBehavior::className(),
                 'attributes' => [
                     BaseActiveRecord::EVENT_BEFORE_INSERT => 'created',
-                    BaseActiveRecord::EVENT_BEFORE_UPDATE => 'published',
+                    BaseActiveRecord::EVENT_BEFORE_UPDATE => 'published'
                 ]
             ],
         ];
@@ -135,7 +129,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
             ''                     => 'All',
             self::STATUS_NEW       => 'New',
             self::STATUS_PUBLISHED => 'Published',
-            self::STATUS_STOPPED   => 'Stoped',
+            self::STATUS_STOPPED   => 'Stoped'
         ];
     }
 
@@ -143,24 +137,9 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
         return [
             self::TYPE_TEXT => 'Text',
             self::TYPE_IMG  => 'Text & Picture',
-            self::TYPE_GIF  => 'Text & Animation',
+            self::TYPE_GIF  => 'Text & Animation'
         ];
     }
-
-    //region Transaction
-    public function transactions() {
-        return [
-            self::SCENARIO_INSERT => self::OP_INSERT,
-            //self::SCENARIO_UPDATE => self::OP_UPDATE,
-        ];
-    }
-
-    public function stopTransaction() {
-        $transaction = self::getDb()->getTransaction();
-        if ($transaction)
-            $transaction->rollback();
-    }
-    //endregion
 
     /**
      * @inheritdoc
@@ -168,7 +147,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
     public function scenarios() {
         return [
             self::SCENARIO_INSERT => ['type', 'text', 'status', 'tags', 'file_id', 'sid', 'provider', 'created', 'published', 'url'],
-            self::SCENARIO_UPDATE => ['published'],
+            self::SCENARIO_UPDATE => ['published']
         ];
     }
 
@@ -209,9 +188,17 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
             ->all();
     }
 
+    public function getSkippingTags() {
+        return [
+            '<br>',
+            '<br/>',
+            '<br />'
+        ];
+    }
+
     //region Get and Set
     public function setText($text) {
-        $text = addslashes(strip_tags(str_replace(["<br>", "<br/>", "<br />"], "", $text)));
+        $text = addslashes(strip_tags(str_replace($this->getSkippingTags(), '', $text)));
         $this->text = $text;
     }
 
@@ -293,7 +280,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
                 $file->saveAs($fileModel->filePath);
 
                 if (!$fileModel->save()) {
-                    $file->stopTransaction();
+                    $fileModel->stopTransaction();
 
                     return false;
                 }
@@ -318,7 +305,7 @@ class Posts extends \yii\db\ActiveRecord implements IItemStatus, IItemType, IDat
     public function getHtmlImagesArray() {
         $images = [];
 
-        if (isset($this->files)) {
+        if ($this->files !== null) {
             foreach ($this->files AS $file) {
                 $images[] = Html::img($file->url, ['class' => 'file-preview-image', 'alt' => $file->name, 'title' => $file->name]);
             }

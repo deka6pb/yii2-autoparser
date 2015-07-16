@@ -23,9 +23,9 @@ class ConsumersController extends Controller {
             'verbs' => [
                 'class'   => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
+                    'delete' => ['post']
+                ]
+            ]
         ];
     }
 
@@ -35,11 +35,11 @@ class ConsumersController extends Controller {
      */
     public function actionIndex() {
         $dataProvider = new ActiveDataProvider([
-            'query' => Consumers::find(),
+            'query' => Consumers::find()
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -56,7 +56,7 @@ class ConsumersController extends Controller {
 
         return $this->render('view', [
             'model'        => $model,
-            'modelOptions' => $modelOptions,
+            'modelOptions' => $modelOptions
         ]);
     }
 
@@ -78,7 +78,7 @@ class ConsumersController extends Controller {
         } else {
             return $this->render('create', [
                 'model'        => $model,
-                'modelOptions' => $modelOptions,
+                'modelOptions' => $modelOptions
             ]);
         }
     }
@@ -104,7 +104,7 @@ class ConsumersController extends Controller {
         } else {
             return $this->render('update', [
                 'model'        => $model,
-                'modelOptions' => $modelOptions,
+                'modelOptions' => $modelOptions
             ]);
         }
     }

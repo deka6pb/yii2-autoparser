@@ -3,6 +3,7 @@
 namespace deka6pb\autoparser\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\helpers\BaseJson;
 
 /**
@@ -12,7 +13,7 @@ use yii\helpers\BaseJson;
  * @property string $name
  * @property string $options
  */
-class Consumers extends \yii\db\ActiveRecord {
+class Consumers extends ActiveRecord {
     public $optionsModel;
 
     /**

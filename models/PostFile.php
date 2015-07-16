@@ -2,6 +2,7 @@
 
 namespace deka6pb\autoparser\models;
 
+use deka6pb\autoparser\components\Abstraction\ATransactionModel;
 use Yii;
 
 /**
@@ -13,10 +14,7 @@ use Yii;
  * @property Files $file
  * @property Posts $post
  */
-class PostFile extends \yii\db\ActiveRecord {
-    const SCENARIO_INSERT = 'create';
-    const SCENARIO_UPDATE = 'update';
-
+class PostFile extends ATransactionModel {
     /**
      * @inheritdoc
      */
@@ -58,21 +56,6 @@ class PostFile extends \yii\db\ActiveRecord {
      */
     public function getPost() {
         return $this->hasOne(Posts::className(), ['id' => 'post_id']);
-    }
-    //endregion
-
-    //region Transaction
-    public function transactions() {
-        return [
-            self::SCENARIO_INSERT => self::OP_INSERT,
-            self::SCENARIO_UPDATE => self::OP_UPDATE,
-        ];
-    }
-
-    public function stopTransaction() {
-        $transaction = self::getDb()->getTransaction();
-        if ($transaction)
-            $transaction->rollback();
     }
     //endregion
 }

@@ -2,9 +2,7 @@
 namespace deka6pb\autoparser\components\Concrete\Consumers;
 
 use CURLFile;
-use deka6pb\autoparser\components\Abstraction\APostDataConsumerBase;
-use deka6pb\autoparser\components\PostingException;
-use deka6pb\autoparser\models\Posts;
+use deka6pb\autoparser\components\PostingService\Abstraction\APostDataConsumerBase;
 use Yii;
 use yii\authclient\clients\VKontakte;
 use yii\authclient\OAuthToken;
@@ -30,32 +28,8 @@ class VkConsumer extends APostDataConsumerBase {
         ]);
     }
 
-    function SendPosts($data) {
-        try {
-            foreach ($data AS $post) {
-                if (!($post instanceof Posts)) {
-                    throw new ErrorException('This post does not belong to the class Media', 400);
-                }
-
-                switch ($post->type) {
-                    case self::TYPE_TEXT:
-                        $this->SendText($post);
-                        break;
-                    case self::TYPE_GIF:
-                        $this->SendGif($post);
-                        break;
-                    case self::TYPE_IMG:
-                        $this->SendImg($post);
-                        break;
-                }
-            }
-        } catch (ErrorException $e) {
-            throw new PostingException($e->getMessage(), $e->getCode(), $post);
-        }
-    }
-
     //region SendTypes
-    private function SendText($post) {
+    public function SendText($post) {
         $attachment = "";
         if (!empty($post->url))
             $attachment = $post->url;
@@ -68,7 +42,7 @@ class VkConsumer extends APostDataConsumerBase {
         ]);
     }
 
-    private function SendGif($post) {
+    public function SendGif($post) {
         $uploadServer = $this->client->api('docs.getUploadServer', "GET", [
             'gid' => $this->GROUP_ID
         ]);
@@ -99,8 +73,9 @@ class VkConsumer extends APostDataConsumerBase {
             $attache_array[] = "doc{$v['response'][0]['owner_id']}_{$v['response'][0]['did']}";
         }
 
-        if (!empty($post->url))
+        if (!empty($post->url)) {
             $attache_array[] = $post->url;
+        }
 
         $attachments = implode(",", $attache_array);
 
@@ -115,7 +90,7 @@ class VkConsumer extends APostDataConsumerBase {
         return isset($response['response']['post_id']);
     }
 
-    private function SendImg($post) {
+    public function SendImg($post) {
         $uploadServer = $this->client->api('photos.getWallUploadServer', "GET", [
             'gid' => $this->GROUP_ID
         ]);
@@ -149,8 +124,9 @@ class VkConsumer extends APostDataConsumerBase {
             $attache_array[] = $v['response'][0]['id'];
         }
 
-        if (!empty($post->url))
+        if (!empty($post->url)) {
             $attache_array[] = $post->url;
+        }
 
         $attachments = implode(",", $attache_array);
 
@@ -168,7 +144,7 @@ class VkConsumer extends APostDataConsumerBase {
 
     //endregion
 
-    function SendInvites() {
+    public function SendInvites() {
         $invitedUsers = $this->client->api('groups.getInvitedUsers', 'GET', [
             'group_id' => $this->GROUP_ID,
             'count'    => 20,
@@ -192,7 +168,7 @@ class VkConsumer extends APostDataConsumerBase {
         }
     }
 
-    function saveFile($uploadServer, $post_params) {
+    public function saveFile($uploadServer, $post_params) {
         $ch = curl_init($uploadServer['response']['upload_url']);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_POST, true);

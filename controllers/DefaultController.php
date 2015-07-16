@@ -2,9 +2,8 @@
 
 namespace deka6pb\autoparser\controllers;
 
-use deka6pb\autoparser\components\CollectorService;
-use deka6pb\autoparser\components\PostingService;
-use deka6pb\autoparser\models\Posts;
+use deka6pb\autoparser\components\CollectorService\Concrete\CollectorService;
+use deka6pb\autoparser\components\PostingService\Concrete\PostingService;
 use Yii;
 use yii\web\Controller;
 
@@ -16,13 +15,9 @@ class DefaultController extends Controller {
     }
 
     public function actionRun() {
-        if (Posts::countNewPosts() < $this->module->getMaxCountPosting()) {
-            $collector = new CollectorService();
-            $collector->run();
-        }
+        new CollectorService();
+        new PostingService();
 
-        $posting = new PostingService();
-        $posting->run();
         $this->redirect("index");
     }
 }

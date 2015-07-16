@@ -1,5 +1,5 @@
 <?php
-namespace deka6pb\autoparser\components;
+namespace deka6pb\autoparser\behaviors;
 
 use yii\behaviors\AttributeBehavior;
 use yii\db\BaseActiveRecord;
