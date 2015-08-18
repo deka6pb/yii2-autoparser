@@ -1,8 +1,8 @@
 <?php
 namespace deka6pb\autoparser\components\Concrete\Consumers;
 
-use deka6pb\autoparser\components\Abstraction\APostDataConsumerBase;
 use deka6pb\autoparser\components\PostingException;
+use deka6pb\autoparser\components\PostingService\Abstraction\APostDataConsumerBase;
 use deka6pb\autoparser\models\Posts;
 use ErrorException;
 use yii\authclient\clients\Facebook;
@@ -51,32 +51,8 @@ class OkConsumer extends APostDataConsumerBase {
         }
     }
 
-    function SendPosts($data) {
-        try {
-            foreach ($data AS $post) {
-                if (!($post instanceof Posts)) {
-                    throw new ErrorException('This post does not belong to the class Media', 400);
-                }
-
-                switch ($post->type) {
-                    case self::TYPE_TEXT:
-                        $this->SendText($post);
-                        break;
-                    case self::TYPE_GIF:
-                        $this->SendText($post);
-                        break;
-                    case self::TYPE_IMG:
-                        $this->SendText($post);
-                        break;
-                }
-            }
-        } catch (ErrorException $e) {
-            throw new PostingException($e->getMessage(), $e->getCode(), $post);
-        }
-    }
-
     //region SendTypes
-    private function SendText($post) {
+    public function SendText($post) {
         $attachment = "";
         if (!empty($post->url))
             $attachment = $post->url;
@@ -89,7 +65,7 @@ class OkConsumer extends APostDataConsumerBase {
         ]);*/
     }
 
-    private function SendGif($post) {
+    public function SendGif($post) {
         $uploadServer = $this->client->api('docs.getUploadServer', "GET", [
             'gid' => $this->GROUP_ID
         ]);
@@ -136,7 +112,7 @@ class OkConsumer extends APostDataConsumerBase {
         return isset($response['response']['post_id']);
     }
 
-    private function SendImg($post) {
+    public function SendImg($post) {
         $uploadServer = $this->client->api('photos.getWallUploadServer', "GET", [
             'gid' => $this->GROUP_ID
         ]);
@@ -186,51 +162,4 @@ class OkConsumer extends APostDataConsumerBase {
 
         return isset($response['response']['post_id']);
     }
-
-    //endregion
-    /*
-        function SendInvites() {
-            $invitedUsers = $this->client->api('groups.getInvitedUsers', 'GET', [
-                'group_id' => $this->GROUP_ID,
-                'count'    => 20,
-                'fields'   => 'nickname',
-            ]);
-
-            $users = $this->client->api('users.search', 'GET', [
-                'q'      => '',
-                'fields' => 'uid',
-                'count'  => '200',
-            ]);
-
-            foreach ($users['response'] AS $user) {
-                if (!empty($user['uid'])) {
-                    $this->client->api('groups.invite', 'GET', [
-                        'group_id' => $this->GROUP_ID,
-                        'user_id'  => $user['uid'],
-                    ]);
-                }
-
-            }
-        }
-
-        function saveFile($uploadServer, $post_params) {
-            $ch = curl_init($uploadServer['response']['upload_url']);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_params);
-            $result = curl_exec($ch);
-
-            // check cURL error
-            $errorNumber = curl_errno($ch);
-            $errorMessage = curl_error($ch);
-
-            curl_close($ch);
-
-            if (!empty($errorNumber)) {
-                throw new ErrorException($errorMessage, $errorNumber);
-            }
-
-            return json_decode($result);
-        }*/
 }
