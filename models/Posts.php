@@ -250,7 +250,11 @@ class Posts extends ATransactionModel implements IItemStatus, IItemType, IDataTi
     }
 
     public function afterSave($insert, $changedAttributes) {
+        $this->uploadFiles = array();
+        UploadedFile::reset();
+
         $this->uploadFiles = UploadedFiles::getInstances($this, 'uploadFiles');
+        $_FILES = array();
 
         if (!empty($this->uploadFiles)) {
             if (!$this->upload()) {
