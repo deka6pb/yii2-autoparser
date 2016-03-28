@@ -19,12 +19,12 @@
   ],
   "minimum-stability": "dev",
   "require": {
+    "2amigos/yii2-date-picker-widget" : "~1.0"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "~2.0",
     "codeception/specify": "*",
     "codeception/verify": "*",
-    "2amigos/yii2-date-picker-widget": "~1.0",
     "kartik-v/yii2-widget-fileinput": "*"
   },
   "autoload": {
